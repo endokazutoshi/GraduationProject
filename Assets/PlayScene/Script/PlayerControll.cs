@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
             // ƒvƒŒƒCƒ„[‚ÌˆÚ“®ˆ—
             transform.Translate(Vector3.right * moveInput_H1 * speed_H * Time.deltaTime);
-            transform.Translate(Vector3.down * moveInput_V1 * speed_V * Time.deltaTime);
+            //transform.Translate(Vector3.down * moveInput_V1 * speed_V * Time.deltaTime);
         }
         else if (PlayerNumber == P2)
         {
@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
             float moveInput_V2 = Input.GetAxis("L_Stick_V_2P");
 
             transform.Translate(Vector3.right * moveInput_H2 * speed_H * Time.deltaTime);
-            transform.Translate(Vector3.down * moveInput_V2 * speed_V * Time.deltaTime);
+           // transform.Translate(Vector3.down * moveInput_V2 * speed_V * Time.deltaTime);
         }
         
 
