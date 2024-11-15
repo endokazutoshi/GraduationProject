@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public int PlayerNumber;
     public float speed_H = 5f; // ˆÚ“®‘¬“x‚Ì’²®
     public float speed_V = 3f;
+    Rigidbody rbody2D;
 
     private void Update()
     {
@@ -23,7 +24,11 @@ public class PlayerController : MonoBehaviour
         else if (PlayerNumber == P2)
         {
             float moveInput_H2 = Input.GetAxis("L_Stick_H_2P");
-            float moveInput_V2 = Input.GetAxis("L_Stick_V_2P");
+            
+            if(Input.GetButton("L_Stick_V_2P"))
+            {
+                Jump();
+            }
 
             transform.Translate(Vector3.right * moveInput_H2 * speed_H * Time.deltaTime);
            // transform.Translate(Vector3.down * moveInput_V2 * speed_V * Time.deltaTime);
@@ -31,5 +36,12 @@ public class PlayerController : MonoBehaviour
         
 
     }
+
+    void Jump()
+    {
+        // ã•ûŒü‚É—Í‚ğ‰Á‚¦‚é–‚ÅƒWƒƒƒ“ƒv‚·‚é
+        rbody2D.AddForce(Vector2.up * 300);
+    }
+
 }
 
