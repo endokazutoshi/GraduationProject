@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public int PlayerNumber;
     public float speed_H = 5f; // …•½ˆÚ“®‘¬“x
     private Rigidbody2D rbody2D;
 
@@ -15,11 +14,11 @@ public class PlayerMovement : MonoBehaviour
     {
         float moveInput_H = 0f;
 
-        if (PlayerNumber == 1)
+        if (CompareTag("Player1"))
         {
             moveInput_H = Input.GetAxis("L_Stick_H_1P");
         }
-        else if (PlayerNumber == 2)
+        else if (CompareTag("Player2"))
         {
             moveInput_H = Input.GetAxis("L_Stick_H_2P");
         }
