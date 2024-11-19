@@ -29172,7 +29172,7 @@ GameObject:
   - component: {fileID: 554998346}
   - component: {fileID: 554998347}
   - component: {fileID: 554998348}
-  - component: {fileID: 554998349}
+  - component: {fileID: 554998350}
   m_Layer: 0
   m_Name: Player1
   m_TagString: Player1
@@ -29332,7 +29332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed_H: 0
---- !u!114 &554998349
+--- !u!114 &554998350
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -61463,7 +61463,7 @@ GameObject:
   - component: {fileID: 1263394823}
   - component: {fileID: 1263394824}
   - component: {fileID: 1263394825}
-  - component: {fileID: 1263394826}
+  - component: {fileID: 1263394828}
   m_Layer: 0
   m_Name: Player2
   m_TagString: Player2
@@ -61623,7 +61623,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed_H: 0
---- !u!114 &1263394826
+--- !u!114 &1263394828
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77635,7 +77635,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1588085030}
   - component: {fileID: 1588085029}
-  - component: {fileID: 1588085028}
   - component: {fileID: 1588085026}
   - component: {fileID: 1588085025}
   m_Layer: 0
@@ -77674,14 +77673,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed_H: 5
---- !u!81 &1588085028
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1588085024}
-  m_Enabled: 1
 --- !u!20 &1588085029
 Camera:
   m_ObjectHideFlags: 0

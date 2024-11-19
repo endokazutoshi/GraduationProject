@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerJumpController : MonoBehaviour
+public class PlayerJumpControll : MonoBehaviour
 {
     private Rigidbody2D rbody2D;
 
@@ -14,8 +14,8 @@ public class PlayerJumpController : MonoBehaviour
         // プレイヤー1の場合
         if (CompareTag("Player1"))
         {
-            // プレイヤー1がジャンプボタンを押したら
-            if (Input.GetButtonDown("A_Button_1P"))
+            // プレイヤー1のジャンプボタンを押した時
+            if (Input.GetButtonDown("Jump_P1"))
             {
                 Jump(); // プレイヤー1のジャンプ処理
             }
@@ -23,8 +23,8 @@ public class PlayerJumpController : MonoBehaviour
         // プレイヤー2の場合
         else if (CompareTag("Player2"))
         {
-            // プレイヤー2がジャンプボタンを押したら
-            if (Input.GetButtonDown("A_Button_2P"))
+            // プレイヤー2のジャンプボタンを押した時
+            if (Input.GetButtonDown("Jump_P2"))
             {
                 Jump(); // プレイヤー2のジャンプ処理
             }
