@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Player1
   - Player2
+  - Item
+  - Wall
   layers:
   - Default
   - TransparentFX
