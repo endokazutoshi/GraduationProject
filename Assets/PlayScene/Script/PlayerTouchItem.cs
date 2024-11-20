@@ -7,6 +7,7 @@ public class PlayerTouchItem : MonoBehaviour
 
     private GameObject currentItem;
     private GameObject itemInRange;
+    private bool isInBoxRange = false;  // Box内にアイテムがあるかどうかの判定
 
     void Update()
     {
@@ -28,7 +29,14 @@ public class PlayerTouchItem : MonoBehaviour
                 }
                 else
                 {
-                    DropItem(); // アイテムを離す
+                    if (isInBoxRange)  // Box内に入っている場合は、アイテムをBox内に置く
+                    {
+                        PlaceItemInBox();  // アイテムをBox内に置く処理
+                    }
+                    else
+                    {
+                        DropItem(); // アイテムを離す
+                    }
                 }
             }
         }
@@ -45,7 +53,14 @@ public class PlayerTouchItem : MonoBehaviour
                 }
                 else
                 {
-                    DropItem(); // アイテムを離す
+                    if (isInBoxRange)  // Box内に入っている場合は、アイテムをBox内に置く
+                    {
+                        PlaceItemInBox();  // アイテムをBox内に置く処理
+                    }
+                    else
+                    {
+                        DropItem(); // アイテムを離す
+                    }
                 }
             }
         }
@@ -75,6 +90,47 @@ public class PlayerTouchItem : MonoBehaviour
         }
     }
 
+    // アイテムをBoxに入れる処理
+    void PlaceItemInBox()
+    {
+        // Boxの範囲内にアイテムを配置
+        BoxCollider2D boxCollider = itemInRange.GetComponent<BoxCollider2D>();  // BoxCollider2Dを取得
+
+        if (boxCollider != null)
+        {
+            // Box内にアイテムを配置（Boxの中心にアイテムを配置）
+            currentItem.transform.position = itemInRange.transform.position;
+            Debug.Log("アイテムをBox内に配置しました: " + currentItem.name);
+
+            if (currentItem != null)
+            {
+                Destroy(currentItem);  // アイテムをシーンから削除
+                currentItem = null;  // アイテムを持っていない状態に戻す
+                Debug.Log("アイテムを削除しました");
+            }
+
+            // "ItemBox"という名前のオブジェクトを削除する
+            RemoveObjectByName("Square (9)");
+            // "ItemBox"という名前のオブジェクトを削除する
+            RemoveObjectByName("Square (10)");
+            // "ItemBox"という名前のオブジェクトを削除する
+            RemoveObjectByName("Square (25)");
+            // "ItemBox"という名前のオブジェクトを削除する
+            RemoveObjectByName("Square (26)");
+
+            // アイテムの物理挙動を再度有効化
+            Rigidbody2D rb = currentItem.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.isKinematic = true; // 物理シミュレーションを有効化
+            }
+
+            // アイテムを持っていない状態にする
+            currentItem = null;
+            isInBoxRange = false;  // Box内から出た状態にする
+        }
+    }
+
     // アイテムをドロップする処理
     void DropItem()
     {
@@ -82,31 +138,6 @@ public class PlayerTouchItem : MonoBehaviour
         {
             // ドロップ先の位置を計算（プレイヤーの右側）
             Vector3 dropPosition = new Vector3(player.transform.position.x + 1, player.transform.position.y, player.transform.position.z);
-
-            // アイテムの範囲（BoxCollider2Dの大きさを使う）
-            BoxCollider2D itemCollider = currentItem.GetComponent<BoxCollider2D>();
-
-            // アイテムのドロップ位置に対して、重なっているものがあるかをチェック
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(dropPosition, itemCollider.size, 0f); // 0fで回転を無視
-
-            bool isWallDetected = false;
-
-            // 重なっているコライダーの中にWallタグがあるかをチェック
-            foreach (var collider in colliders)
-            {
-                if (collider.CompareTag("Wall"))
-                {
-                    isWallDetected = true;
-                    break;  // Wallが見つかれば、ループを終了
-                }
-            }
-
-            if (isWallDetected)
-            {
-                // 壁がある場合、アイテムをプレイヤーの位置に戻す
-                dropPosition = player.transform.position;
-                Debug.Log("右側に壁があるため、アイテムをプレイヤーの位置に戻しました");
-            }
 
             // アイテムをドロップ
             currentItem.transform.position = dropPosition;
@@ -132,6 +163,14 @@ public class PlayerTouchItem : MonoBehaviour
             itemInRange = other.gameObject;  // 範囲内のアイテムを記録
             Debug.Log("アイテムが範囲に入りました: " + other.name);
         }
+
+        if (other.CompareTag("Box"))
+        {
+            isInBoxRange = true;  // アイテムがBoxの範囲内に入ったことを記録4
+                                  // アイテムの物理挙動を再度有効化
+
+            Debug.Log("Box内に入った");
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -141,5 +180,29 @@ public class PlayerTouchItem : MonoBehaviour
             itemInRange = null;  // 範囲外に出たアイテムを記録
             Debug.Log("アイテムが範囲から出ました: " + other.name);
         }
+
+        if (other.CompareTag("Box"))
+        {
+            isInBoxRange = false;  // アイテムがBoxの範囲外に出たことを記録
+            Debug.Log("Boxから出た");
+        }
     }
+
+    // 名前でオブジェクトを検索して削除する
+    void RemoveObjectByName(string objectName)
+    {
+        // 名前でオブジェクトを検索
+        GameObject objectToDelete = GameObject.Find(objectName);
+
+        if (objectToDelete != null)
+        {
+            Destroy(objectToDelete);  // オブジェクトを削除
+            Debug.Log(objectName + " を削除しました");
+        }
+        else
+        {
+            Debug.LogWarning(objectName + " がシーン内に見つかりませんでした");
+        }
+    }
+
 }
