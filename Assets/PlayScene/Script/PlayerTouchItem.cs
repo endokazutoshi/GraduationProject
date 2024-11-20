@@ -63,14 +63,19 @@ public class PlayerTouchItem : MonoBehaviour
             currentItem.transform.position = player.transform.position + new Vector3(0, 1, 0);  // Y + 1
             Debug.Log("アイテムの位置: " + currentItem.transform.position);
 
-            // Rigidbody2DのisKinematicを有効にして物理シミュレーションを無効化
-            currentItem.GetComponent<Rigidbody2D>().isKinematic = true;
+            // アイテムの物理挙動を無効化（アイテムを持つ）
+            Rigidbody2D rb = currentItem.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.isKinematic = true; // 物理シミュレーションを無効化
+            }
 
             // BoxCollider2DのIs Triggerを有効にして、物理的衝突を無視
             currentItem.GetComponent<BoxCollider2D>().isTrigger = true;
         }
     }
 
+    // アイテムをドロップする処理
     void DropItem()
     {
         if (currentItem != null)  // アイテムを持っている場合
@@ -107,11 +112,11 @@ public class PlayerTouchItem : MonoBehaviour
             currentItem.transform.position = dropPosition;
             Debug.Log("アイテムをドロップしました: " + currentItem.name);
 
-            // アイテムのRigidbody2DのisKinematicを無効にして物理シミュレーションを有効化
+            // アイテムの物理挙動を再度有効化
             Rigidbody2D rb = currentItem.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
-                rb.isKinematic = true; // アイテムをドロップする際に物理シミュレーションを有効化
+                rb.isKinematic = true; // 物理シミュレーションを有効化
             }
 
             // アイテムを持っていない状態にする

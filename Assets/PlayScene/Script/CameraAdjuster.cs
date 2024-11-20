@@ -3,7 +3,6 @@ using UnityEngine;
 public class CameraAdjuster : MonoBehaviour
 {
     public Transform player;         // プレイヤーのTransform
-    public Vector3 cameraOffset;     // カメラの位置オフセット（プレイヤーとの相対位置）
     public Vector2 minBound;         // カメラの移動範囲の最小値 (X, Y)
     public Vector2 maxBound;         // カメラの移動範囲の最大値 (X, Y)
 
@@ -29,14 +28,14 @@ public class CameraAdjuster : MonoBehaviour
         if (player != null)
         {
             // プレイヤーの位置にカメラを追従させる
-            Vector3 targetPosition = player.position + cameraOffset;
+            Vector3 targetPosition = player.position;
 
             // 範囲を制限する
             targetPosition.x = Mathf.Clamp(targetPosition.x, minBound.x, maxBound.x);
             targetPosition.y = Mathf.Clamp(targetPosition.y, minBound.y, maxBound.y);
 
             // カメラの位置を更新
-            transform.position = targetPosition;
+            transform.position = new Vector3(targetPosition.x, targetPosition.y, transform.position.z);
         }
     }
 }

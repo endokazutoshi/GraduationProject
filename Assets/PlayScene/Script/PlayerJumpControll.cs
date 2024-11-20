@@ -35,7 +35,7 @@ public class PlayerJumpControll : MonoBehaviour
     {
         if (rbody2D != null)
         {
-            rbody2D.AddForce(Vector2.up * 300); // ジャンプ力の調整
+            rbody2D.AddForce(Vector2.up * 500); // ジャンプ力の調整
         }
         else
         {
