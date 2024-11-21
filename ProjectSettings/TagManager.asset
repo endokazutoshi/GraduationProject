@@ -9,6 +9,9 @@ TagManager:
   - Item
   - Wall
   - Box
+  - SecondCamera
+  - MCamera
+  - SCamera
   layers:
   - Default
   - TransparentFX
