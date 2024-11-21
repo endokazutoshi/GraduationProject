@@ -72,4 +72,5 @@ public class InputItem: MonoBehaviour
             Debug.Log("プレイヤーがBoxの範囲から出ました");
         }
     }
+    //ちょっとした内容の追加をしました。
 }
