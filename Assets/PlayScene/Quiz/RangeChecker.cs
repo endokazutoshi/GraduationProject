@@ -3,32 +3,46 @@ using System.Collections;
 
 public class RangeChecker : MonoBehaviour
 {
-    public Transform player1;               // プレイヤー1のTransform
-    public Transform player2;               // プレイヤー2のTransform
-    public Vector2 rangeCenter;             // 範囲の中心座標
-    public Vector2 rangeSize = new Vector2(5f, 5f); // 範囲のサイズ
+    public string player1Tag = "Player1";           // プレイヤー1のTag
+    public string player2Tag = "Player2";           // プレイヤー2のTag
 
-    public GameObject imageObjectPlayer1;   // プレイヤー1用画像
-    public GameObject imageObjectPlayer2;   // プレイヤー2用画像
+    public GameObject rangeObject;                  // 範囲を指定するオブジェクト(Square)
+    public GameObject imageObjectPlayer1;           // プレイヤー1用画像
+    public GameObject imageObjectPlayer2;           // プレイヤー2用画像
 
-    private Camera mainCamera; // プレイヤー1用カメラ
-    private Camera secondCamera; // プレイヤー2用カメラ
+    private Camera mainCamera;                      // プレイヤー1用カメラ
+    private Camera secondCamera;                    // プレイヤー2用カメラ
 
-    private bool isPlayer1ImageVisible = false; // プレイヤー1画像の表示状態
-    private bool isPlayer2ImageVisible = false; // プレイヤー2画像の表示状態
+    private bool isPlayer1ImageVisible = false;     // プレイヤー1画像の表示状態
+    private bool isPlayer2ImageVisible = false;     // プレイヤー2画像の表示状態
+
+    private Collider2D rangeCollider;               // 範囲オブジェクトのCollider2D
 
     void Start()
     {
+        // `rangeObject`からCollider2Dを取得
+        if (rangeObject != null)
+        {
+            rangeCollider = rangeObject.GetComponent<Collider2D>();
+            if (rangeCollider == null)
+            {
+                Debug.LogError("範囲オブジェクトにCollider2Dが設定されていません。");
+            }
+        }
+        else
+        {
+            Debug.LogError("範囲オブジェクトが設定されていません。");
+        }
+
         // タグでカメラを探して設定
         GameObject cameraObject = GameObject.FindGameObjectWithTag("MCamera");
-
-        if (cameraObject.CompareTag("MCamera"))
+        if (cameraObject != null)
         {
             mainCamera = cameraObject.GetComponent<Camera>();
         }
-        GameObject cameraObject2 = GameObject.FindGameObjectWithTag("SCamera");
 
-        if (cameraObject2.CompareTag("SCamera"))
+        GameObject cameraObject2 = GameObject.FindGameObjectWithTag("SCamera");
+        if (cameraObject2 != null)
         {
             secondCamera = cameraObject2.GetComponent<Camera>();
         }
@@ -41,15 +55,18 @@ public class RangeChecker : MonoBehaviour
         if (Display.displays.Length > 1)
         {
             Display.displays[1].Activate();
-            Debug.Log("Display 2 Active: " + Display.displays[1].active); // 修正: isActive -> active
+            Debug.Log("Display 2 Active: " + Display.displays[1].active);
         }
     }
 
     void Update()
     {
-        // プレイヤー1とプレイヤー2が範囲内にいるかを確認
-        bool isPlayer1InRange = IsPlayerInRange(player1);
-        bool isPlayer2InRange = IsPlayerInRange(player2);
+        // プレイヤー1とプレイヤー2のTagを使って範囲内にいるかを確認
+        GameObject player1Object = GameObject.FindGameObjectWithTag(player1Tag);
+        GameObject player2Object = GameObject.FindGameObjectWithTag(player2Tag);
+
+        bool isPlayer1InRange = IsPlayerInRange(player1Object);
+        bool isPlayer2InRange = IsPlayerInRange(player2Object);
 
         // プレイヤー1が範囲内にいて対応ボタンが押された場合
         if (isPlayer1InRange && Input.GetButtonDown("B_Button_1P"))
@@ -60,6 +77,11 @@ public class RangeChecker : MonoBehaviour
                 mainCamera.targetDisplay = 0; // Player 1の画像をDisplay 1に表示
             }
         }
+        // プレイヤー1が範囲外に出た場合、画像を非表示にする
+        else if (!isPlayer1InRange && isPlayer1ImageVisible)
+        {
+            ToggleImage(imageObjectPlayer1, ref isPlayer1ImageVisible); // 非表示にする
+        }
 
         // プレイヤー2が範囲内にいて対応ボタンが押された場合
         if (isPlayer2InRange && Input.GetButtonDown("B_Button_2P"))
@@ -67,26 +89,25 @@ public class RangeChecker : MonoBehaviour
             ToggleImage(imageObjectPlayer2, ref isPlayer2ImageVisible);
             if (secondCamera != null)
             {
-                // 少し遅延してディスプレイを切り替え
                 StartCoroutine(SwitchToSecondDisplay());
             }
+        }
+        // プレイヤー2が範囲外に出た場合、画像を非表示にする
+        else if (!isPlayer2InRange && isPlayer2ImageVisible)
+        {
+            ToggleImage(imageObjectPlayer2, ref isPlayer2ImageVisible); // 非表示にする
         }
     }
 
     // 指定されたプレイヤーが範囲内にいるか判定する
-    private bool IsPlayerInRange(Transform player)
+    private bool IsPlayerInRange(GameObject playerObject)
     {
-        if (player == null) return false;
+        if (playerObject == null || rangeCollider == null) return false;
 
-        Vector2 playerPos = new Vector2(player.position.x, player.position.y);
-
-        // 範囲の左下と右上を計算
-        Vector2 bottomLeft = rangeCenter - rangeSize / 2;
-        Vector2 topRight = rangeCenter + rangeSize / 2;
-
-        // プレイヤーの位置が範囲内か判定
-        return playerPos.x >= bottomLeft.x && playerPos.x <= topRight.x &&
-               playerPos.y >= bottomLeft.y && playerPos.y <= topRight.y;
+        // プレイヤーの位置を取得して範囲内かをチェック
+        bool isInRange = rangeCollider.bounds.Contains(playerObject.transform.position);
+        Debug.Log($"Player {playerObject.name} is in range: {isInRange}");
+        return isInRange;
     }
 
     // 画像の表示と非表示を切り替える
@@ -102,8 +123,11 @@ public class RangeChecker : MonoBehaviour
     // 範囲をシーンビューで可視化する（デバッグ用）
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(rangeCenter, rangeSize);
+        if (rangeObject != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(rangeObject.transform.position, rangeObject.transform.localScale);
+        }
     }
 
     // 1フレーム遅延してDisplay 2に切り替えるコルーチン
