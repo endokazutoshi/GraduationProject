@@ -37,7 +37,7 @@ public class Itemrespawn : MonoBehaviour
         if (other.gameObject.CompareTag("Item"))
         {
             //Destroy(other.gameObject);  // アイテムを消去
-            time = 1.0f;  // アイテム生成までの時間をリセット
+            time = 3.0f;  // アイテム生成までの時間をリセット
             isSpawn = false;  // 再度アイテムを生成できるように
         }
     }
