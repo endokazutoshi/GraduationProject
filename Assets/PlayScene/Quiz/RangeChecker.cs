@@ -69,7 +69,7 @@ public class RangeChecker : MonoBehaviour
         bool isPlayer2InRange = IsPlayerInRange(player2Object);
 
         // プレイヤー1が範囲内にいて対応ボタンが押された場合
-        if (isPlayer1InRange && Input.GetButtonDown("B_Button_1P"))
+        if (isPlayer1InRange && Input.GetButtonDown("Y_Button_1P"))
         {
             ToggleImage(imageObjectPlayer1, ref isPlayer1ImageVisible);
             if (mainCamera != null)
@@ -84,7 +84,7 @@ public class RangeChecker : MonoBehaviour
         }
 
         // プレイヤー2が範囲内にいて対応ボタンが押された場合
-        if (isPlayer2InRange && Input.GetButtonDown("B_Button_2P"))
+        if (isPlayer2InRange && Input.GetButtonDown("Y_Button_2P"))
         {
             ToggleImage(imageObjectPlayer2, ref isPlayer2ImageVisible);
             if (secondCamera != null)
