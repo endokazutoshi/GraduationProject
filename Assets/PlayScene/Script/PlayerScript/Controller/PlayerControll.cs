@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
         rbody2D = GetComponent<Rigidbody2D>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         float moveInput_H = 0f;
 
