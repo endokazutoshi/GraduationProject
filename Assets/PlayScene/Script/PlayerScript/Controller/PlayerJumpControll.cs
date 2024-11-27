@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerJumpControll : MonoBehaviour
+public class PlayerJumpControl : MonoBehaviour
 {
     private Rigidbody2D rbody2D;
     private bool isGrounded;
@@ -20,8 +20,7 @@ public class PlayerJumpControll : MonoBehaviour
 
     private void Update()
     {
-        // Wallに触れているときもジャンプが可能
-        if (isGrounded || IsTouchingWall())
+        if (isGrounded)
         {
             if (CompareTag("Player1") && Input.GetButtonDown("Jump_P1"))
             {
@@ -57,7 +56,7 @@ public class PlayerJumpControll : MonoBehaviour
             rbody2D.velocity = new Vector2(rbody2D.velocity.x, initialJumpForce);
 
             isJumping = true;
-            isGrounded = false;
+            isGrounded = false; // 地面から離れたとみなす
             jumpTimeCounter = 0;
         }
         else
@@ -85,31 +84,57 @@ public class PlayerJumpControll : MonoBehaviour
         isJumping = false;
     }
 
-    // Wallに触れているかを確認する関数
-    bool IsTouchingWall()
-    {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right, 0.5f);
-        return hit.collider != null && hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall");
-    }
+    [SerializeField]
+    private float groundCheckDistanceX = 0.5f; // 左右の範囲をInspectorで調整可能
+    [SerializeField]
+    private float groundCheckDistanceY = 0.5f; // 下方向の範囲をInspectorで調整可能
 
-    // GroundChk関数：プレイヤーがStageLayerに触れているか確認
     bool GroundChk()
     {
-        Vector3 startposition = transform.position;                       // Playerの中心を始点とする
-        Vector3 endposition = transform.position - transform.up * 0.7f;  // Playerの足元を終点とする
+        // 現在位置を中心に各チェックポイントを計算
+        Vector3 leftPosition = transform.position - new Vector3(groundCheckDistanceX, 0, 0);
+        Vector3 rightPosition = transform.position + new Vector3(groundCheckDistanceX, 0, 0);
+        Vector3 bottomPosition = transform.position - new Vector3(0, groundCheckDistanceY, 0);
 
-        // Debug用に始点と終点を表示する
-        Debug.DrawLine(startposition, endposition, Color.red);
+        // デバッグ用にラインを表示
+        Debug.DrawLine(leftPosition, rightPosition, Color.green); // 左右のライン
+        Debug.DrawLine(transform.position, bottomPosition, Color.blue); // 下方向のライン
 
-        // Physics2D.Linecastを使い、StageLayer（mapCanvasのWallレイヤー）に接触していたらTrueを返す
-        return Physics2D.Linecast(startposition, endposition, StageLayer);
+        // X方向のラインチェック
+        RaycastHit2D xHit = Physics2D.Linecast(leftPosition, rightPosition, StageLayer);
+
+        // Y方向のラインチェック（下方向のみ）
+        RaycastHit2D yHit = Physics2D.Linecast(transform.position, bottomPosition, StageLayer);
+
+        // XまたはY方向に接触がある場合
+        if (xHit.collider != null || yHit.collider != null)
+        {
+            if (xHit.collider != null)
+            {
+                Debug.Log($"Wall 検出（X方向）: {xHit.collider.gameObject.name}");
+            }
+
+            if (yHit.collider != null)
+            {
+                Debug.Log($"Wall 検出（Y方向）: {yHit.collider.gameObject.name}");
+            }
+
+            return true;
+        }
+
+        return false; // 接触がない場合
     }
+
+
+
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
         {
             isGrounded = true;
+            Debug.Log("ジャンプできます");
         }
     }
 
@@ -118,12 +143,12 @@ public class PlayerJumpControll : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
         {
             isGrounded = false;
+            Debug.Log("ジャンプできません");
         }
     }
 
     void CheckGroundStatus()
     {
-        // GroundChkを使って、プレイヤーの足元がStageLayer（mapCanvasのWallレイヤー）と接触しているか確認
         if (GroundChk())
         {
             isGrounded = true;
