@@ -7,16 +7,16 @@ public class RangeChecker : MonoBehaviour
     public string player2Tag = "Player2";           // プレイヤー2のTag
 
     public GameObject rangeObject;                  // 範囲を指定するオブジェクト(Square)
-    public GameObject imageObjectPlayer1;           // プレイヤー1用画像
-    public GameObject imageObjectPlayer2;           // プレイヤー2用画像
+    public GameObject[] imageObjectsPlayer1;        // プレイヤー1用画像の配列
+    public GameObject[] imageObjectsPlayer2;        // プレイヤー2用画像の配列
 
     private Camera mainCamera;                      // プレイヤー1用カメラ
     private Camera secondCamera;                    // プレイヤー2用カメラ
 
-    private bool isPlayer1ImageVisible = false;     // プレイヤー1画像の表示状態
-    private bool isPlayer2ImageVisible = false;     // プレイヤー2画像の表示状態
-
     private Collider2D rangeCollider;               // 範囲オブジェクトのCollider2D
+
+    private GameObject selectedImagePlayer1;        // プレイヤー1用に選ばれたランダム画像
+    private GameObject selectedImagePlayer2;        // プレイヤー2用に選ばれたランダム画像
 
     void Start()
     {
@@ -47,9 +47,14 @@ public class RangeChecker : MonoBehaviour
             secondCamera = cameraObject2.GetComponent<Camera>();
         }
 
+        // ゲーム開始時に共通の乱数で画像を決定
+        int randomIndex = Random.Range(0, imageObjectsPlayer1.Length); // 共通の乱数
+        selectedImagePlayer1 = imageObjectsPlayer1[randomIndex];
+        selectedImagePlayer2 = imageObjectsPlayer2[randomIndex];
+
         // 画像を非表示に設定
-        if (imageObjectPlayer1 != null) imageObjectPlayer1.SetActive(false);
-        if (imageObjectPlayer2 != null) imageObjectPlayer2.SetActive(false);
+        HideAllImages(imageObjectsPlayer1);
+        HideAllImages(imageObjectsPlayer2);
 
         // Display 2を有効化
         if (Display.displays.Length > 1)
@@ -68,34 +73,31 @@ public class RangeChecker : MonoBehaviour
         bool isPlayer1InRange = IsPlayerInRange(player1Object);
         bool isPlayer2InRange = IsPlayerInRange(player2Object);
 
-        // プレイヤー1が範囲内にいて対応ボタンが押された場合
-        if (isPlayer1InRange && Input.GetButtonDown("Y_Button_1P"))
-        {
-            ToggleImage(imageObjectPlayer1, ref isPlayer1ImageVisible);
-            if (mainCamera != null)
-            {
-                mainCamera.targetDisplay = 0; // Player 1の画像をDisplay 1に表示
-            }
-        }
-        // プレイヤー1が範囲外に出た場合、画像を非表示にする
-        else if (!isPlayer1InRange && isPlayer1ImageVisible)
-        {
-            ToggleImage(imageObjectPlayer1, ref isPlayer1ImageVisible); // 非表示にする
-        }
+        // プレイヤー1とプレイヤー2の画像表示を統一したメソッドで処理
+        HandlePlayerImageDisplay(player1Object, isPlayer1InRange, selectedImagePlayer1, ref mainCamera, 0, "Y_Button_1P");
+        HandlePlayerImageDisplay(player2Object, isPlayer2InRange, selectedImagePlayer2, ref secondCamera, 1, "Y_Button_2P");
+    }
 
-        // プレイヤー2が範囲内にいて対応ボタンが押された場合
-        if (isPlayer2InRange && Input.GetButtonDown("Y_Button_2P"))
+    // プレイヤーごとの画像表示処理
+    private void HandlePlayerImageDisplay(GameObject playerObject, bool isPlayerInRange, GameObject selectedImage, ref Camera camera, int displayIndex, string buttonName)
+    {
+        if (playerObject == null || selectedImage == null) return;
+
+        bool isImageVisible = selectedImage.activeSelf;
+
+        // プレイヤーが範囲内にいて対応ボタンが押された場合
+        if (isPlayerInRange && Input.GetButtonDown(buttonName))
         {
-            ToggleImage(imageObjectPlayer2, ref isPlayer2ImageVisible);
-            if (secondCamera != null)
+            ToggleImage(selectedImage, ref isImageVisible);
+            if (camera != null)
             {
-                StartCoroutine(SwitchToSecondDisplay());
+                camera.targetDisplay = displayIndex; // 対応するディスプレイに切り替え
             }
         }
-        // プレイヤー2が範囲外に出た場合、画像を非表示にする
-        else if (!isPlayer2InRange && isPlayer2ImageVisible)
+        // プレイヤーが範囲外に出た場合、画像を非表示にする
+        else if (!isPlayerInRange && isImageVisible)
         {
-            ToggleImage(imageObjectPlayer2, ref isPlayer2ImageVisible); // 非表示にする
+            HideAllImages(new GameObject[] { selectedImage });
         }
     }
 
@@ -117,6 +119,18 @@ public class RangeChecker : MonoBehaviour
         {
             isVisible = !isVisible; // 表示状態を切り替える
             imageObject.SetActive(isVisible);
+        }
+    }
+
+    // すべての画像を非表示にする
+    private void HideAllImages(GameObject[] imageObjects)
+    {
+        foreach (var imageObject in imageObjects)
+        {
+            if (imageObject != null)
+            {
+                imageObject.SetActive(false);
+            }
         }
     }
 
