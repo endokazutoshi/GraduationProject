@@ -12,6 +12,7 @@ TagManager:
   - SecondCamera
   - MCamera
   - SCamera
+  - Gold key
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Water
   - UI
   - Wall
-  - 
+  - Item
   - 
   - 
   - 
