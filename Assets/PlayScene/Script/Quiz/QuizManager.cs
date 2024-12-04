@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class QuizManager : MonoBehaviour
 {
+    public static QuizManager Instance;  // Singletonインスタンス
+
     [System.Serializable]
     public class QuestionAnswerPair
     {
-        public GameObject questionObject;  // 問題オブジェクト（3DオブジェクトやUIエレメントなど）
+        public GameObject questionObject;  // 問題オブジェクト
         public string correctAnswerTag;    // 正解のアイテムのタグ（文字列で設定）
     }
 
@@ -13,43 +15,42 @@ public class QuizManager : MonoBehaviour
 
     private QuestionAnswerPair currentQuestion;  // 現在の問題と正解のペア
 
+    public RangeChecker rangeChecker;  // RangeChecker スクリプトを参照
+
+    void Awake()
+    {
+        // Singletonの初期化
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+
     void Start()
     {
-        GenerateRandomQuestion();  // ランダムな問題を生成
-    }
-
-    // ランダムに問題を選択する
-    void GenerateRandomQuestion()
-    {
-        int randomIndex = Random.Range(0, questionAnswerPairs.Length);
-        currentQuestion = questionAnswerPairs[randomIndex];  // ランダムな問題と解答を取得
-
-        // 他の問題オブジェクトを非表示にする（前の問題を隠す）
-        foreach (var pair in questionAnswerPairs)
+        // 初期化でランダムな問題を設定
+        if (rangeChecker != null)
         {
-            if (pair.questionObject != null)
-            {
-                pair.questionObject.SetActive(false);  // すべての問題オブジェクトを非表示
-            }
-        }
-
-        // 現在選ばれた問題オブジェクトを表示
-        if (currentQuestion.questionObject != null)
-        {
-            Debug.Log("問題: " + currentQuestion.questionObject.name);
-            currentQuestion.questionObject.SetActive(true);  // オブジェクトをシーンに表示
+            rangeChecker.SetRandomQuestion();  // RangeCheckerにランダムな問題設定
         }
     }
 
-    // 現在の問題を返すメソッド
+    // 現在の問題を返す
     public QuestionAnswerPair GetCurrentQuestion()
     {
         return currentQuestion;
     }
 
-    // Unityエディタ用にタグ選択機能を追加（Custom Editorなどで使う）
-    public string[] GetAllTags()
+    // 現在の問題をRangeCheckerから設定
+    public void SetCurrentQuestionFromRangeChecker(GameObject question, string correctAnswerTag)
     {
-        return UnityEditorInternal.InternalEditorUtility.tags;  // Unityのタグを取得
+        currentQuestion = new QuestionAnswerPair
+        {
+            questionObject = question,
+            correctAnswerTag = correctAnswerTag
+        };
+
+        Debug.Log("現在の問題: " + currentQuestion.questionObject.name);
+        Debug.Log("正解タグ: " + currentQuestion.correctAnswerTag);
     }
 }
