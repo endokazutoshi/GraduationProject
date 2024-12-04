@@ -2,93 +2,60 @@ using UnityEngine;
 
 public class ItemInteraction : MonoBehaviour
 {
-    public bool hasItem = false; // アイテムを持っているか
-    private GameObject heldItem; // 持っているアイテム
-    public Transform holdPosition; // アイテムを持つ位置（例えばプレイヤーの手の位置）
+    public Transform holdPosition;
+    private GameObject heldItem;
+    public LayerMask itemLayer;
+    private BoxCheck boxCheck;
+
+    void Start()
+    {
+        boxCheck = FindObjectOfType<BoxCheck>();
+    }
 
     void Update()
     {
-        // アイテムを持つ処理
-        if (Input.GetButtonDown("B_Button_1P") && !hasItem)
+        if (Input.GetButtonDown("B_Button_1P"))
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right, 1f);
-            if (hit.collider != null && hit.collider.CompareTag("Item"))
+            if (heldItem == null)
             {
-                heldItem = hit.collider.gameObject;
-                PickUpItem(heldItem);
+                TryPickUpItem();
+            }
+            else
+            {
+                TryPlaceItemInBox();
             }
         }
-        // アイテムを手放す処理
-        else if (Input.GetButtonDown("B_Button_1P") && hasItem)
-        {
-            DropItem();
-        }
-
-        // アイテムをボックスに入れる処理
-        if (hasItem && Input.GetButtonDown("B_Button_1P")) // Fキーでアイテムをボックスに入れる
-        {
-            PlaceItemInBox();
-        }
     }
 
-    // アイテムを持つ処理
-    void PickUpItem(GameObject item)
+    void TryPickUpItem()
     {
-        item.transform.SetParent(holdPosition);
-        item.transform.localPosition = Vector3.zero; // 持つ位置を調整
-
-        Rigidbody2D rb = item.GetComponent<Rigidbody2D>();
-        if (rb != null)
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right, 1f, itemLayer);
+        if (hit.collider != null)
         {
-            rb.isKinematic = true; // 物理演算を無効にする
-        }
-
-        hasItem = true;
-        Debug.Log("アイテムを持ちました: " + item.name);
-    }
-
-    // アイテムを手放す処理
-    void DropItem()
-    {
-        if (heldItem != null)
-        {
-            heldItem.transform.SetParent(null); // アイテムの親を解除
+            heldItem = hit.collider.gameObject;
+            heldItem.transform.SetParent(holdPosition);
+            heldItem.transform.localPosition = Vector3.zero;
 
             Rigidbody2D rb = heldItem.GetComponent<Rigidbody2D>();
             if (rb != null)
-            {
-                rb.isKinematic = false; // 物理演算を有効にする
-            }
+                rb.isKinematic = true;
 
-            Debug.Log("アイテムを手放しました: " + heldItem.name);
-            heldItem = null;
-            hasItem = false;
+            Debug.Log("アイテムを持ちました: " + heldItem.name);
         }
     }
 
-    // アイテムをボックスに入れる処理
-    void PlaceItemInBox()
+    void TryPlaceItemInBox()
     {
-        if (heldItem != null)
+        Collider2D boxCollider = Physics2D.OverlapCircle(transform.position, 1f, LayerMask.GetMask("Box"));
+        if (boxCollider != null)
         {
-            // アイテムをボックスの位置に移動
-            heldItem.transform.position = transform.position;
-
-            // アイテムをボックスに入れる
-            Debug.Log("アイテムをボックスに入れました: " + heldItem.name);
-
-            // ボックスの正誤判定を呼び出す
-            BoxCheck boxCheck = FindObjectOfType<BoxCheck>(); // シーン内のBoxCheckスクリプトを探す
-            if (boxCheck != null)
-            {
-                boxCheck.CheckItem(heldItem); // アイテムがボックスに入れられた際に正誤判定を行う
-            }
-
-            // アイテムを消去
+            boxCheck.CheckItem(heldItem);
             Destroy(heldItem);
-
-            // アイテムを手放す
-            DropItem();
+            heldItem = null;
+        }
+        else
+        {
+            Debug.Log("ボックスが近くにありません");
         }
     }
 }
