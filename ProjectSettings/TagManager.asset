@@ -13,6 +13,8 @@ TagManager:
   - MCamera
   - SCamera
   - Gold key
+  - Ruby key
+  - Sapphire key
   layers:
   - Default
   - TransparentFX
@@ -22,7 +24,7 @@ TagManager:
   - UI
   - Wall
   - Item
-  - 
+  - Box
   - 
   - 
   - 

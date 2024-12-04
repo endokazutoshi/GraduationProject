@@ -2,28 +2,36 @@ using UnityEngine;
 
 public class BoxCheck : MonoBehaviour
 {
-    private QuizManager quizManager; // QuizManagerを参照
+    private QuizManager quizManager;
 
     void Start()
     {
-        // QuizManagerを取得
         quizManager = FindObjectOfType<QuizManager>();
     }
 
-    // アイテムをボックスに入れたときに呼ばれるメソッド
     public void CheckItem(GameObject item)
     {
-        if (quizManager != null)
+        // 現在の問題を取得
+        QuizManager.QuestionAnswerPair currentQuestion = quizManager.GetCurrentQuestion();
+
+        if (currentQuestion != null)
         {
-            // クイズの正解アイテムと照合
-            if (item == quizManager.correctItem)
+            // 現在の問題の正解タグを取得
+            string correctAnswerTag = currentQuestion.correctAnswerTag;
+
+            // 正解かどうかをチェック
+            if (item.CompareTag(correctAnswerTag))
             {
-                Debug.Log("正解のアイテムです！");
+                Debug.Log("正解です！");
             }
             else
             {
-                Debug.Log("不正解のアイテムです！");
+                Debug.Log("不正解です！");
             }
+        }
+        else
+        {
+            Debug.LogError("現在の問題がありません");
         }
     }
 }
