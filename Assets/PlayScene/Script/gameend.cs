@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;  // SceneManagerを使うためにインポート
 
 public class gameend : MonoBehaviour
 {
@@ -8,15 +9,20 @@ public class gameend : MonoBehaviour
         // プレイヤータグが付いたオブジェクトに触れた場合
         if (collider.CompareTag("Player1"))
         {
-            Debug.Log("プレイヤーがオブジェクトに触れました。終了します。");
-
-            // 実行を終了する
-            // エディタでも動作確認するためにエディタチェック
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
+            Debug.Log("プレイヤー1がオブジェクトに触れました。リザルトシーンに遷移します。");
+            SceneChange("Player1");
+                        
         }
+        // プレイヤータグが付いたオブジェクトに触れた場合
+        if (collider.CompareTag("Player2"))
+        {
+            Debug.Log("プレイヤー2がオブジェクトに触れました。リザルトシーンに遷移します。");
+            SceneChange("Player2");
+
+        }
+    }
+    void SceneChange(string PlayerTag)
+    {
+        SceneManager.LoadScene("ResultScene");
     }
 }
