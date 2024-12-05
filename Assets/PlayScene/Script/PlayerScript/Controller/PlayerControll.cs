@@ -2,9 +2,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public int can_move = 0;  // 'can_move' を public にして直接アクセス可能にする
     public float speed_H = 5f; // 水平移動速度
-
-    public int can_move = 0; // 操作をできなくするための変数 (0: 移動可能, 1: 移動不可)
 
     private Rigidbody2D rbody2D;
 
@@ -15,7 +14,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // can_move が 1 の場合は移動を無効にする
+        Debug.Log("can_moveは" + can_move);
+        // can_move が 0 の場合は移動を有効にする
         if (can_move == 0)
         {
             float moveInput_H = 0f;  // 横方向の入力値
@@ -33,6 +33,9 @@ public class PlayerMovement : MonoBehaviour
             // 横移動
             transform.Translate(Vector3.right * moveInput_H * speed_H * Time.deltaTime);
         }
-        // can_move が 1 の場合は移動処理をしない (移動不可)
+        else
+        {
+            // can_move が 1 の場合は移動しない (移動不可)
+        }
     }
 }
