@@ -25,6 +25,17 @@ public class ItemInteraction : MonoBehaviour
                 TryPlaceItemInBox();
             }
         }
+        if (Input.GetButtonDown("B_Button_2P"))
+        {
+            if (heldItem == null)
+            {
+                TryPickUpItem();
+            }
+            else
+            {
+                TryPlaceItemInBox();
+            }
+        }
     }
 
     void TryPickUpItem()

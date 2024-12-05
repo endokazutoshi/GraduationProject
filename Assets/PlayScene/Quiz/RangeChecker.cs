@@ -14,10 +14,9 @@ public class RangeChecker : MonoBehaviour
 
     private Collider2D rangeCollider;               // 範囲オブジェクトのCollider2D
 
-    private GameObject selectedImagePlayer1;        // プレイヤー1用に選ばれたランダム画像
-    private GameObject selectedImagePlayer2;        // プレイヤー2用に選ばれたランダム画像
+    private GameObject selectedImagePlayer1;        // プレイヤー1用に選ばれた画像
+    private GameObject selectedImagePlayer2;        // プレイヤー2用に選ばれた画像
 
-    public QuizManager.QuestionAnswerPair currentQuestion;  // 現在の問題を格納
 
     void Start()
     {
@@ -58,9 +57,6 @@ public class RangeChecker : MonoBehaviour
             Display.displays[1].Activate();
             Debug.Log("Display 2 Active: " + Display.displays[1].active);
         }
-
-        // ランダムに問題を決定し、表示
-        SetRandomQuestion();
     }
 
     void Update()
@@ -77,21 +73,25 @@ public class RangeChecker : MonoBehaviour
         HandlePlayerImageDisplay(player2Object, isPlayer2InRange, selectedImagePlayer2, ref secondCamera, 1, "Y_Button_2P");
     }
 
-    // ランダムに問題を選んで表示
-    public void SetRandomQuestion()
+    // 現在選ばれている問題番号に基づいて画像を更新する
+    public void SetCurrentQuestionObject(int player, GameObject questionObject)
     {
-        int randomIndex = Random.Range(0, imageObjectsPlayer1.Length); // 共通の乱数
-
-        // ランダムに選ばれた問題の画像を設定
-        selectedImagePlayer1 = imageObjectsPlayer1[randomIndex];
-        selectedImagePlayer2 = imageObjectsPlayer2[randomIndex];
-
-        // QuizManagerに現在の問題と正解タグを渡す
-        if (currentQuestion != null)
+        if (player == 1)
         {
-            currentQuestion.questionObject = selectedImagePlayer1; // プレイヤー1の画像を設定
-            currentQuestion.correctAnswerTag = selectedImagePlayer1.name; // 画像名を正解タグとして設定
+            // プレイヤー1用の選ばれた画像をセット
+            selectedImagePlayer1 = questionObject;
+            Debug.Log($"プレイヤー1の選ばれた画像: {selectedImagePlayer1.name}");
         }
+        else if (player == 2)
+        {
+            // プレイヤー2用の選ばれた画像をセット
+            selectedImagePlayer2 = questionObject;
+            Debug.Log($"プレイヤー2の選ばれた画像: {selectedImagePlayer2.name}");
+        }
+        else
+        {
+            Debug.LogError("無効なプレイヤー番号です。");
+        }　
 
         // 画像を非表示に設定
         HideAllImages(imageObjectsPlayer1);
