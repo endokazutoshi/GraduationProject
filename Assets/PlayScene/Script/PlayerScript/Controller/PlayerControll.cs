@@ -15,7 +15,8 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         Debug.Log("can_move‚Í" + can_move);
-        // can_move ‚ª 0 ‚Ìê‡‚ÍˆÚ“®‚ğ—LŒø‚É‚·‚é
+
+        // can_move ‚ª 0 ‚Ìê‡‚ÍˆÚ“®‚ğ‹–‰Â
         if (can_move == 0)
         {
             float moveInput_H = 0f;  // ‰¡•ûŒü‚Ì“ü—Í’l
