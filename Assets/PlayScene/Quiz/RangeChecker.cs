@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 public class RangeChecker : MonoBehaviour
 {
@@ -15,8 +14,9 @@ public class RangeChecker : MonoBehaviour
 
     private Collider2D rangeCollider;               // 範囲オブジェクトのCollider2D
 
-    private GameObject selectedImagePlayer1;        // プレイヤー1用に選ばれたランダム画像
-    private GameObject selectedImagePlayer2;        // プレイヤー2用に選ばれたランダム画像
+    private GameObject selectedImagePlayer1;        // プレイヤー1用に選ばれた画像
+    private GameObject selectedImagePlayer2;        // プレイヤー2用に選ばれた画像
+
 
     void Start()
     {
@@ -47,11 +47,6 @@ public class RangeChecker : MonoBehaviour
             secondCamera = cameraObject2.GetComponent<Camera>();
         }
 
-        // ゲーム開始時に共通の乱数で画像を決定
-        int randomIndex = Random.Range(0, imageObjectsPlayer1.Length); // 共通の乱数
-        selectedImagePlayer1 = imageObjectsPlayer1[randomIndex];
-        selectedImagePlayer2 = imageObjectsPlayer2[randomIndex];
-
         // 画像を非表示に設定
         HideAllImages(imageObjectsPlayer1);
         HideAllImages(imageObjectsPlayer2);
@@ -76,6 +71,31 @@ public class RangeChecker : MonoBehaviour
         // プレイヤー1とプレイヤー2の画像表示を統一したメソッドで処理
         HandlePlayerImageDisplay(player1Object, isPlayer1InRange, selectedImagePlayer1, ref mainCamera, 0, "Y_Button_1P");
         HandlePlayerImageDisplay(player2Object, isPlayer2InRange, selectedImagePlayer2, ref secondCamera, 1, "Y_Button_2P");
+    }
+
+    // 現在選ばれている問題番号に基づいて画像を更新する
+    public void SetCurrentQuestionObject(int player, GameObject questionObject)
+    {
+        if (player == 1)
+        {
+            // プレイヤー1用の選ばれた画像をセット
+            selectedImagePlayer1 = questionObject;
+            Debug.Log($"プレイヤー1の選ばれた画像: {selectedImagePlayer1.name}");
+        }
+        else if (player == 2)
+        {
+            // プレイヤー2用の選ばれた画像をセット
+            selectedImagePlayer2 = questionObject;
+            Debug.Log($"プレイヤー2の選ばれた画像: {selectedImagePlayer2.name}");
+        }
+        else
+        {
+            Debug.LogError("無効なプレイヤー番号です。");
+        }　
+
+        // 画像を非表示に設定
+        HideAllImages(imageObjectsPlayer1);
+        HideAllImages(imageObjectsPlayer2);
     }
 
     // プレイヤーごとの画像表示処理
@@ -132,23 +152,5 @@ public class RangeChecker : MonoBehaviour
                 imageObject.SetActive(false);
             }
         }
-    }
-
-    // 範囲をシーンビューで可視化する（デバッグ用）
-    void OnDrawGizmos()
-    {
-        if (rangeObject != null)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(rangeObject.transform.position, rangeObject.transform.localScale);
-        }
-    }
-
-    // 1フレーム遅延してDisplay 2に切り替えるコルーチン
-    private IEnumerator SwitchToSecondDisplay()
-    {
-        yield return null; // 1フレーム遅延
-        secondCamera.targetDisplay = 1; // Display 2にカメラを設定
-        Debug.Log("Display 2に切り替え完了");
     }
 }
