@@ -34,8 +34,9 @@ public class Itemrespawn : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         // アイテムと衝突した場合の処理
-        if (other.gameObject.CompareTag("Item"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Item") || Input.GetButtonDown("B_Button_1P") || Input.GetButtonDown("B_Button_2P"))
         {
+            Debug.Log("アイテムをリスポーン");
             //Destroy(other.gameObject);  // アイテムを消去
             time = 3.0f;  // アイテム生成までの時間をリセット
             isSpawn = false;  // 再度アイテムを生成できるように
