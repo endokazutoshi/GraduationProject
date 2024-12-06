@@ -97,12 +97,12 @@ public class BoxCheck : MonoBehaviour
                 Debug.Log("不正解です！");
 
                 // Bボタンが押されていて、かつ触れている場合に判定
-                if (canPlayer1 && Input.GetButtonDown("B_Button_1P"))
+                if (canPlayer1 && Input.GetButtonDown("Y_Button_1P"))
                 {
                     Debug.Log("Player 1's Bボタンが押されました！");
                     IncorrectAnswer("Player1");
                 }
-                if (canPlayer2 && Input.GetButtonDown("B_Button_2P"))
+                if (canPlayer2 && Input.GetButtonDown("Y_Button_2P"))
                 {
                     Debug.Log("Player 2's Bボタンが押されました！");
                     IncorrectAnswer("Player2");
