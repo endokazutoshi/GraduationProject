@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4800951936170224372}
   - component: {fileID: 8511111909899109083}
   - component: {fileID: 725687775069563110}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sapphire key
-  m_TagString: Item
+  m_TagString: Sapphire key
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

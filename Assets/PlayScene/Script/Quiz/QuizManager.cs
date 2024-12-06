@@ -38,8 +38,18 @@ public class QuizManager : MonoBehaviour
         // 初期化時に最初の問題を設定する
         SetQuestion(0);  // ここでは問題番号0を最初の問題として設定しています
 
+<<<<<<< HEAD
         // 現在の問題オブジェクトをアクティブ化
         ActivateCurrentQuestionObject();
+=======
+        // ランダムな問題番号を決定してRangeCheckerに送信
+        Debug.Log("今の数字は→" + randomIndex);
+
+        // プレイヤー1とプレイヤー2に異なる画像を渡す
+        rangeChecker.SetCurrentQuestionObject(1, rangeChecker.imageObjectsPlayer1[randomIndex]);  // プレイヤー1に選ばれた画像を送信
+        rangeChecker.SetCurrentQuestionObject(2, rangeChecker.imageObjectsPlayer2[randomIndex]);  // プレイヤー2に選ばれた画像を送信
+    
+>>>>>>> origin/kudo
     }
 
     // 指定した問題番号で問題を設定する
