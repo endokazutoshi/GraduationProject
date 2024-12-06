@@ -91,11 +91,7 @@ public class RangeChecker : MonoBehaviour
         else
         {
             Debug.LogError("無効なプレイヤー番号です。");
-        }　
-
-        // 画像を非表示に設定
-        HideAllImages(imageObjectsPlayer1);
-        HideAllImages(imageObjectsPlayer2);
+        }
     }
 
     // プレイヤーごとの画像表示処理

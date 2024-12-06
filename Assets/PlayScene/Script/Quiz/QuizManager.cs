@@ -39,9 +39,10 @@ public class QuizManager : MonoBehaviour
         // ランダムな問題番号を決定してRangeCheckerに送信
         Debug.Log("今の数字は→" + randomIndex);
 
-        // ランダムに選ばれたquestionObjectをRangeCheckerに渡す
-        rangeChecker.SetCurrentQuestionObject(1, questionAnswerPairs[randomIndex].questionObject);  // プレイヤー1に選ばれた問題オブジェクトを送信
-        rangeChecker.SetCurrentQuestionObject(2, questionAnswerPairs[randomIndex].questionObject);
+        // プレイヤー1とプレイヤー2に異なる画像を渡す
+        rangeChecker.SetCurrentQuestionObject(1, rangeChecker.imageObjectsPlayer1[randomIndex]);  // プレイヤー1に選ばれた画像を送信
+        rangeChecker.SetCurrentQuestionObject(2, rangeChecker.imageObjectsPlayer2[randomIndex]);  // プレイヤー2に選ばれた画像を送信
+    
     }
 
     // ランダムな問題を選んで設定する
