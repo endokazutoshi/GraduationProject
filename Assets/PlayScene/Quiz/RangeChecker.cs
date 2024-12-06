@@ -76,14 +76,6 @@ public class RangeChecker : MonoBehaviour
     // 現在選ばれている問題番号に基づいて画像を更新する
     public void SetCurrentQuestionObject(int player, GameObject questionObject)
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
-        // プレイヤーが存在しない場合は処理を中止
-        if (playerObject == null) return;
-
-        // 範囲内でボタンが押された場合
-        if (isPlayerInRange && Input.GetButtonDown(buttonName)) // 指定されたボタンが押された場合
-=======
         if (player == 1)
         {
             // プレイヤー1用の選ばれた画像をセット
@@ -100,40 +92,6 @@ public class RangeChecker : MonoBehaviour
         {
             Debug.LogError("無効なプレイヤー番号です。");
         }
-    }
-
-    // プレイヤーごとの画像表示処理
-    private void HandlePlayerImageDisplay(GameObject playerObject, bool isPlayerInRange, GameObject selectedImage, ref Camera camera, int displayIndex, string buttonName)
-    {
-        if (playerObject == null || selectedImage == null) return;
-
-        bool isImageVisible = selectedImage.activeSelf;
-
-        // プレイヤーが範囲内にいて対応ボタンが押された場合
-        if (isPlayerInRange && Input.GetButtonDown(buttonName))
->>>>>>> origin/kudo
-=======
-        if (player == 1)
->>>>>>> parent of a6c76c3 (菫ｮ豁｣荳ｭ)
-        {
-            // プレイヤー1用の選ばれた画像をセット
-            selectedImagePlayer1 = questionObject;
-            Debug.Log($"プレイヤー1の選ばれた画像: {selectedImagePlayer1.name}");
-        }
-        else if (player == 2)
-        {
-            // プレイヤー2用の選ばれた画像をセット
-            selectedImagePlayer2 = questionObject;
-            Debug.Log($"プレイヤー2の選ばれた画像: {selectedImagePlayer2.name}");
-        }
-        else
-        {
-            Debug.LogError("無効なプレイヤー番号です。");
-        }　
-
-        // 画像を非表示に設定
-        HideAllImages(imageObjectsPlayer1);
-        HideAllImages(imageObjectsPlayer2);
     }
 
     // プレイヤーごとの画像表示処理
