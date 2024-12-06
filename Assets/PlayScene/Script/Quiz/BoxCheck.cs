@@ -8,7 +8,8 @@ public class BoxCheck : MonoBehaviour
     public GameObject targetObject2;
 
     public GameObject targetPlayer1;  // プレイヤー1
-   
+    public GameObject targetPlayer2;  // プレイヤー2
+
 
     public float timerDuration = 2f;  // 操作不能にさせる秒数
     private float currentTime;
@@ -16,11 +17,15 @@ public class BoxCheck : MonoBehaviour
     public float forceMultiplier = 10f;  // 吹き飛ばす力の倍率
 
     private Vector2 targetPosition1;  // プレイヤー1の最終目的地
-   
     private bool isBlown1 = false;  // プレイヤー1が吹き飛ばされたかどうか
-   
+
+    private Vector2 targetPosition2;  // プレイヤー2の最終目的地
+    private bool isBlown2 = false;  // プレイヤー2が吹き飛ばされたかどうか
+
     private float blowTime = 0f;    // 吹き飛ばしにかかる時間
     float speedFactor = 20f;  // 速さを倍にする（調整可能）
+    bool canPlayer1 = false;//プレイヤーが触れているかの確認
+    bool canPlayer2 = false;//プレイヤーが触れているかの確認
 
     void Start()
     {
@@ -43,8 +48,18 @@ public class BoxCheck : MonoBehaviour
                 isBlown1 = false;  // プレイヤー1の吹き飛ばしが終了
             }
         }
+        if (isBlown2)
+        {
+            // プレイヤー2を吹き飛ばす
+            targetPlayer2.transform.position = Vector2.Lerp(targetPlayer2.transform.position, targetPosition2, blowTime * Time.deltaTime);
+            // 目的地に到達したら移動を停止
+            if (Vector2.Distance(targetPlayer2.transform.position, targetPosition2) < 0.1f)
+            {
+                isBlown2 = false;  // プレイヤー2の吹き飛ばしが終了
+            }
+        }
 
-       
+
 
         // 吹き飛ばし時間を進める
         blowTime += Time.deltaTime * speedFactor;  // speedFactorを掛けて速く進行させる
@@ -80,14 +95,19 @@ public class BoxCheck : MonoBehaviour
             else
             {
                 Debug.Log("不正解です！");
-               
-                // targetPlayer1が"Player1"タグを持っているかチェック
-                if (targetPlayer1.CompareTag("Player1")|| !(item.CompareTag(correctAnswerTag)))
+
+                // Bボタンが押されていて、かつ触れている場合に判定
+                if (canPlayer1 && Input.GetButtonDown("B_Button_1P"))
                 {
-                    Debug.Log("Player 1 processed");
+                    Debug.Log("Player 1's Bボタンが押されました！");
                     IncorrectAnswer("Player1");
                 }
-               
+                if (canPlayer2 && Input.GetButtonDown("B_Button_2P"))
+                {
+                    Debug.Log("Player 2's Bボタンが押されました！");
+                    IncorrectAnswer("Player2");
+                }
+
             }
         }
         else
@@ -95,7 +115,39 @@ public class BoxCheck : MonoBehaviour
             Debug.LogError("現在の問題がありません");
         }
     }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // プレイヤー1のタグを確認
+        if (other.CompareTag("Player1"))
+        {
+            canPlayer1 = true;  // プレイヤーが触れたらBボタンが効くようにする
+            Debug.Log("プレイヤー1がオブジェクトに触れました！");
+            // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
+        }
+        if (other.CompareTag("Player2"))
+        {
+            canPlayer2 = true;  // プレイヤーが触れたらBボタンが効くようにする
+            Debug.Log("プレイヤー2がオブジェクトに触れました！");
+            // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
+        }
 
+    }
+    void OnTriggerExit2D(Collider2D other)
+    {
+        // プレイヤー1のタグを確認
+        if (other.CompareTag("Player1"))
+        {
+            canPlayer1 = false;  // プレイヤーが触れたらBボタンが効くようにする
+            Debug.Log("プレイヤー1がオブジェクトに触れました！");
+            // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
+        }
+        if (other.CompareTag("Player2"))
+        {
+            canPlayer2 = false;  // プレイヤーが触れたらBボタンが効くようにする
+            Debug.Log("プレイヤー2がオブジェクトに触れました！");
+            // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
+        }
+    }
     void CorrectAnswer()
     {
         targetObject.SetActive(true);
@@ -108,7 +160,7 @@ public class BoxCheck : MonoBehaviour
 
         // 各プレイヤーのPlayerMovementコンポーネントを取得
         PlayerMovement playerMovement1 = targetPlayer1.GetComponent<PlayerMovement>();
-       
+        PlayerMovement playerMovement2 = targetPlayer2.GetComponent<PlayerMovement>();
 
         if (playerTag == "Player1" && playerMovement1 != null)
         {
@@ -122,8 +174,20 @@ public class BoxCheck : MonoBehaviour
             float blowDistance = 5f;  // 吹き飛ばし距離（ユニット）
             targetPosition1 = (Vector2)targetPlayer1.transform.position + forceDirection1 * blowDistance;
         }
+        if (playerTag == "Player2" && playerMovement2 != null)
+        {
+            Debug.Log("プレイヤー2が吹き飛びます");
+            // プレイヤー2が不正解なら移動を無効化
+            playerMovement2.can_move = 1;
+            isBlown2 = true;
 
-      
+            // 吹き飛ばし方向と距離を決定
+            Vector2 forceDirection2 = -targetPlayer2.transform.right;  // プレイヤー2の吹き飛ばし方向
+            float blowDistance = 5f;  // 吹き飛ばし距離（ユニット）
+            targetPosition2 = (Vector2)targetPlayer2.transform.position + forceDirection2 * blowDistance;
+        }
+
+
 
         blowTime = 0f;  // 吹き飛ばしの時間をリセット
 
@@ -136,12 +200,17 @@ public class BoxCheck : MonoBehaviour
     void TimerEnded()
     {
         PlayerMovement playerMovement1 = targetPlayer1.GetComponent<PlayerMovement>();
-       
+        PlayerMovement playerMovement2 = targetPlayer2.GetComponent<PlayerMovement>();
 
         if (playerMovement1 != null)
         {
             // can_move を 0 に設定して移動を再許可
             playerMovement1.can_move = 0;
+        }
+        if (playerMovement2 != null)
+        {
+            // can_move を 0 に設定して移動を再許可
+            playerMovement2.can_move = 0;
         }
 
         Debug.Log("タイマー終了。移動が再開されました。");
@@ -149,4 +218,5 @@ public class BoxCheck : MonoBehaviour
         // タイマーをリセット
         currentTime = 0;  // タイマーをリセット
     }
+   
 }
