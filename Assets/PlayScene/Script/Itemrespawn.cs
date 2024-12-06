@@ -1,45 +1,78 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class Itemrespawn : MonoBehaviour
 {
-    [SerializeField] GameObject item;//生成するアイテムのプレハブ
-    float time;
+    [SerializeField] GameObject item;  // 生成するアイテムのプレハブ
+    float time = 0;
     bool isSpawn;
+
+    // プレイヤー1とプレイヤー2のタグ名
+    public string player1Tag = "Player1";
+    public string player2Tag = "Player2";
     public float x, y;
 
-    private Rigidbody2D rb;
+    private bool isPlayerInRange = false; // プレイヤーが範囲内にいるかどうか
+
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         isSpawn = false;
-
+        time = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        time -= Time.deltaTime;
-        if (time <= 0 && !isSpawn)
+        // プレイヤーが範囲内にいるかつBボタンが押されたときにアイテムをリスポーン
+        if (isPlayerInRange && Input.GetButtonDown("B_Button_1P"))
         {
-            // アイテムを生成（位置は2D空間上で指定）
-            Instantiate(item, new Vector3(x, y, 0), Quaternion.identity);
+            Debug.Log("Bボタンが押された！アイテムをリスポーン");
+            // アイテム生成までの時間をリセット
+            time = 3.0f;  // 3秒間のタイマーをスタート
             isSpawn = true;
+        }
+
+        // プレイヤーが範囲内にいなくても、常にタイマーが減少
+        if (time > 0)
+        {
+            time -= Time.deltaTime;  // 時間が経過するごとに減少
+            Debug.Log("Remaining Time: " + time);
+        }
+
+        // タイマーが0になったらアイテムを生成
+        if (time <= 0 && isSpawn)
+        {
+            Itemspawn();
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // アイテムと衝突した場合の処理
-        if (other.gameObject.layer == LayerMask.NameToLayer("Item") || Input.GetButtonDown("B_Button_1P") || Input.GetButtonDown("B_Button_2P"))
+        // プレイヤー1またはプレイヤー2が範囲に入ったとき、範囲内フラグをセット
+        if (other.CompareTag(player1Tag) || other.CompareTag(player2Tag))
         {
-            Debug.Log("アイテムをリスポーン");
-            //Destroy(other.gameObject);  // アイテムを消去
-            time = 3.0f;  // アイテム生成までの時間をリセット
-            isSpawn = false;  // 再度アイテムを生成できるように
+            Debug.Log("プレイヤーが範囲内に入った！");
+            isPlayerInRange = true;
         }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        // プレイヤーが範囲外に出たとき、範囲内フラグをリセット
+        if (other.CompareTag(player1Tag) || other.CompareTag(player2Tag))
+        {
+            Debug.Log("プレイヤーが範囲外に出た！");
+            isPlayerInRange = false;
+        }
+    }
+
+    void Itemspawn()
+    {
+        // アイテムを生成（指定された位置で生成）
+        Instantiate(item, new Vector2(x, y), Quaternion.identity);
+        Debug.Log("Itemspawn: アイテムをリスポーン");
+        isSpawn = false;  // アイテム生成後、フラグをリセット
     }
 }
