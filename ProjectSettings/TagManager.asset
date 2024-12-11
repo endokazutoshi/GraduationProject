@@ -15,6 +15,10 @@ TagManager:
   - Gold key
   - Ruby key
   - Sapphire key
+  - Green mush
+  - ' Yellow mush'
+  - Blue mush
+  - Red mush
   layers:
   - Default
   - TransparentFX
