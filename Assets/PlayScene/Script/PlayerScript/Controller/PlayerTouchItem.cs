@@ -23,6 +23,21 @@ public class PlayerTouchItem : MonoBehaviour
         {
             DropItem();
         }
+        if (Input.GetButtonDown("B_Button_2P") && currentItem == null) // 持つボタン
+        {
+            Collider2D item = Physics2D.OverlapCircle(transform.position, 1.0f, LayerMask.GetMask("Item"));
+            if (item != null)
+            {
+                currentItem = item.gameObject;
+                PickUpItem(currentItem);
+            }
+        }
+
+        // アイテムを落とす
+        if (Input.GetButtonDown("Y_Button_2P") && currentItem != null) // 落とすボタン
+        {
+            DropItem();
+        }
     }
 
     void PickUpItem(GameObject item)
@@ -50,7 +65,7 @@ public class PlayerTouchItem : MonoBehaviour
         Rigidbody2D rb = currentItem.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            rb.isKinematic = false;
+            rb.isKinematic = true;
         }
 
         Debug.Log("アイテムを落としました: " + currentItem.name);

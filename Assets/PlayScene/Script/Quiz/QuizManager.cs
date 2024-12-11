@@ -17,6 +17,8 @@ public class QuizManager : MonoBehaviour
     private QuestionAnswerPair currentQuestion;  // 現在の問題と正解のペア
     private RangeChecker rangeChecker;  // RangeCheckerの参照
 
+    public int randomIndex;
+
     void Awake()
     {
         // Singletonの初期化
@@ -27,18 +29,17 @@ public class QuizManager : MonoBehaviour
 
         // RangeCheckerの参照をAwakeで取得
         rangeChecker = FindObjectOfType<RangeChecker>();
-        if (rangeChecker == null)
-        {
-            Debug.LogError("RangeCheckerが見つかりません。Hierarchyに追加してください。");
-        }
     }
 
     void Start()
     {
-        // 初期化時に最初の問題を設定する
-        SetQuestion(0);  // ここでは問題番号0を最初の問題として設定しています
+        // ランダムな問題を設定
+        SetRandomQuestion();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b2ba948a76161793199e120b2c525b8e38316696
         // ランダムな問題番号を決定してRangeCheckerに送信
         Debug.Log("今の数字は→" + randomIndex);
 
@@ -46,49 +47,25 @@ public class QuizManager : MonoBehaviour
         rangeChecker.SetCurrentQuestionObject(1, rangeChecker.imageObjectsPlayer1[randomIndex]);  // プレイヤー1に選ばれた画像を送信
         rangeChecker.SetCurrentQuestionObject(2, rangeChecker.imageObjectsPlayer2[randomIndex]);  // プレイヤー2に選ばれた画像を送信
     
+<<<<<<< HEAD
 =======
         // 現在の問題オブジェクトをアクティブ化
         ActivateCurrentQuestionObject();
 >>>>>>> a6c76c39c2bdda600488abc7a8e5394e60b1273d
+=======
+>>>>>>> b2ba948a76161793199e120b2c525b8e38316696
     }
 
-    // 指定した問題番号で問題を設定する
-    public void SetQuestion(int questionNumber)
+    // ランダムな問題を選んで設定する
+    public void SetRandomQuestion()
     {
-        // 指定した問題番号に該当する問題を検索
-        foreach (var pair in questionAnswerPairs)
-        {
-            if (pair.questionNumber == questionNumber)
-            {
-                currentQuestion = pair;
-                Debug.Log($"QuizManagerの現在の問題は: {currentQuestion.questionObject.name}");
-                Debug.Log($"QuizManagerの正解タグは: {currentQuestion.correctAnswerTag}");
-                Debug.Log($"QuizManagerの問題番号は: {currentQuestion.questionNumber}");
-                return;
-            }
-        }
+        randomIndex = Random.Range(0, questionAnswerPairs.Length);
+        currentQuestion = questionAnswerPairs[randomIndex];  // 選んだ問題を設定
 
-        // 該当する問題が見つからない場合
-        Debug.LogError($"問題番号 {questionNumber} が見つかりませんでした。");
-    }
-
-    // 現在の問題オブジェクトをアクティブ化
-    private void ActivateCurrentQuestionObject()
-    {
-        // すべての問題オブジェクトを非アクティブ化
-        foreach (var pair in questionAnswerPairs)
-        {
-            if (pair.questionObject != null)
-            {
-                pair.questionObject.SetActive(false);
-            }
-        }
-
-        // 現在の問題オブジェクトをアクティブ化
-        if (currentQuestion != null && currentQuestion.questionObject != null)
-        {
-            currentQuestion.questionObject.SetActive(false);
-        }
+        // 問題をログに表示（デバッグ用）
+        Debug.Log($"QuizManagerの現在の問題は: {currentQuestion.questionObject.name}");
+        Debug.Log($"QuizManagerの正解タグは: {currentQuestion.correctAnswerTag}");
+        Debug.Log($"QuizManagerの問題番号は: {currentQuestion.questionNumber}");
     }
 
     // 解答をチェックするメソッド
@@ -107,23 +84,9 @@ public class QuizManager : MonoBehaviour
         }
     }
 
-    // 現在の問題を返すメソッド
+    // 現在の問題を返す
     public QuestionAnswerPair GetCurrentQuestion()
     {
         return currentQuestion;
-    }
-
-    // 現在の問題番号を返すメソッド
-    public int GetCurrentQuestionNumber()
-    {
-        if (currentQuestion != null)
-        {
-            return currentQuestion.questionNumber;
-        }
-        else
-        {
-            Debug.LogError("現在の問題が設定されていません。");
-            return -1;  // 問題が設定されていない場合は-1を返す
-        }
     }
 }

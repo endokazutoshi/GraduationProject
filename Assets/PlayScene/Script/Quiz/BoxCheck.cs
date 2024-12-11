@@ -27,12 +27,21 @@ public class BoxCheck : MonoBehaviour
     bool canPlayer1 = false;//プレイヤーが触れているかの確認
     bool canPlayer2 = false;//プレイヤーが触れているかの確認
 
+    public GameObject player1Text;  // プレイヤー1用
+    public GameObject player2Text;  // プレイヤー2用
+    public float textDisplayDuration = 2f;  // テキストを表示する時間
+
+
     void Start()
     {
         quizManager = FindObjectOfType<QuizManager>();
         targetObject.SetActive(false);
         targetObject2.SetActive(false);
         currentTime = 0f;  // 初期化時にタイマーは0に設定しておく
+        // 初期状態ではテキストを非表示にしておく
+        if (player1Text != null) player1Text.SetActive(false);
+        if (player2Text != null) player2Text.SetActive(false);
+
     }
 
     void Update()
@@ -85,7 +94,7 @@ public class BoxCheck : MonoBehaviour
         {
             // 現在の問題の正解タグを取得
             string correctAnswerTag = currentQuestion.correctAnswerTag;
-            
+
             // 正解かどうかをチェック
             if (item.CompareTag(correctAnswerTag))
             {
@@ -97,12 +106,12 @@ public class BoxCheck : MonoBehaviour
                 Debug.Log("不正解です！");
 
                 // Bボタンが押されていて、かつ触れている場合に判定
-                if (canPlayer1 && Input.GetButtonDown("B_Button_1P"))
+                if (canPlayer1 && Input.GetButtonDown("Y_Button_1P"))
                 {
                     Debug.Log("Player 1's Bボタンが押されました！");
                     IncorrectAnswer("Player1");
                 }
-                if (canPlayer2 && Input.GetButtonDown("B_Button_2P"))
+                if (canPlayer2 && Input.GetButtonDown("Y_Button_2P"))
                 {
                     Debug.Log("Player 2's Bボタンが押されました！");
                     IncorrectAnswer("Player2");
@@ -123,12 +132,18 @@ public class BoxCheck : MonoBehaviour
             canPlayer1 = true;  // プレイヤーが触れたらBボタンが効くようにする
             Debug.Log("プレイヤー1がオブジェクトに触れました！");
             // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
+            // プレイヤー1用テキストを表示
+            player1Text.SetActive(true);
+
         }
         if (other.CompareTag("Player2"))
         {
             canPlayer2 = true;  // プレイヤーが触れたらBボタンが効くようにする
             Debug.Log("プレイヤー2がオブジェクトに触れました！");
             // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
+            // プレイヤー2用テキストを表示
+            player2Text.SetActive(true);
+
         }
 
     }
@@ -138,14 +153,16 @@ public class BoxCheck : MonoBehaviour
         if (other.CompareTag("Player1"))
         {
             canPlayer1 = false;  // プレイヤーが触れたらBボタンが効くようにする
-            Debug.Log("プレイヤー1がオブジェクトに触れました！");
+            Debug.Log("プレイヤー1がオブジェクトから離れました！");
             // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
+            player1Text.SetActive(false);
         }
         if (other.CompareTag("Player2"))
         {
             canPlayer2 = false;  // プレイヤーが触れたらBボタンが効くようにする
-            Debug.Log("プレイヤー2がオブジェクトに触れました！");
+            Debug.Log("プレイヤー2がオブジェクトから離れました！");
             // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
+            player2Text.SetActive(false);
         }
     }
     void CorrectAnswer()
@@ -218,5 +235,17 @@ public class BoxCheck : MonoBehaviour
         // タイマーをリセット
         currentTime = 0;  // タイマーをリセット
     }
-   
+
+    // プレイヤー1のテキストを非表示
+    private void HidePlayer1Text()
+    {
+        if (player1Text != null) player1Text.SetActive(false);
+    }
+
+    // プレイヤー2のテキストを非表示
+    private void HidePlayer2Text()
+    {
+        if (player2Text != null) player2Text.SetActive(false);
+    }
+
 }
