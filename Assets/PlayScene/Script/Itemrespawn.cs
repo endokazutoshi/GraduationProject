@@ -27,7 +27,7 @@ public class PlayerItemRespawn : MonoBehaviour
     void Update()
     {
         // プレイヤー1がItemレイヤー内にいてBボタンが押された場合にタイマーを開始
-        if (isPlayerInItemLayer && Input.GetButtonDown("B_Button_1P")&& !isRespawnTriggered)
+        if (isPlayerInItemLayer && Input.GetButtonDown("B_Button_1P") && !isRespawnTriggered)
         {
             Debug.Log("Bボタンが押された！アイテムをリスポーン");
             timeRemaining = respawnTime;  // タイマーをセット

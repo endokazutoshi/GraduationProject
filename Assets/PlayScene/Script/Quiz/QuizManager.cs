@@ -36,6 +36,10 @@ public class QuizManager : MonoBehaviour
         // ランダムな問題を設定
         SetRandomQuestion();
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b2ba948a76161793199e120b2c525b8e38316696
         // ランダムな問題番号を決定してRangeCheckerに送信
         Debug.Log("今の数字は→" + randomIndex);
 
@@ -43,6 +47,13 @@ public class QuizManager : MonoBehaviour
         rangeChecker.SetCurrentQuestionObject(1, rangeChecker.imageObjectsPlayer1[randomIndex]);  // プレイヤー1に選ばれた画像を送信
         rangeChecker.SetCurrentQuestionObject(2, rangeChecker.imageObjectsPlayer2[randomIndex]);  // プレイヤー2に選ばれた画像を送信
     
+<<<<<<< HEAD
+=======
+        // 現在の問題オブジェクトをアクティブ化
+        ActivateCurrentQuestionObject();
+>>>>>>> a6c76c39c2bdda600488abc7a8e5394e60b1273d
+=======
+>>>>>>> b2ba948a76161793199e120b2c525b8e38316696
     }
 
     // ランダムな問題を選んで設定する
