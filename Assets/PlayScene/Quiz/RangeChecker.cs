@@ -81,8 +81,8 @@ public class RangeChecker : MonoBehaviour
 
 
         // プレイヤー1とプレイヤー2の画像表示を統一したメソッドで処理
-        HandlePlayerImageDisplay(player1Object, isPlayer1InRange, selectedImagePlayer1, ref mainCamera, 0, "Y_Button_1P",player1Text,0);
-        HandlePlayerImageDisplay(player2Object, isPlayer2InRange, selectedImagePlayer2, ref secondCamera, 1, "Y_Button_2P",player2Text,1);
+        HandlePlayerImageDisplay(player1Object, isPlayer1InRange, selectedImagePlayer1, ref mainCamera, 0, "Y_Button_1P", player1Text, 0);
+        HandlePlayerImageDisplay(player2Object, isPlayer2InRange, selectedImagePlayer2, ref secondCamera, 1, "Y_Button_2P", player2Text, 1);
     }
 
     // 現在選ばれている問題番号に基づいて画像を更新する
