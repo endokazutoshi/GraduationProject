@@ -6,12 +6,23 @@ public class ItemInteraction : MonoBehaviour
     private GameObject heldItem;    // 持っているアイテム
     public LayerMask itemLayer;     // アイテムのレイヤーマスク
     private BoxCheck boxCheck;      // ボックスをチェックするための参照
+    private BoxCheck1 boxCheck1;
     private bool isHoldingItem = false;  // アイテムを持っているかどうかを判定するフラグ
 
     void Start()
     {
         boxCheck = FindObjectOfType<BoxCheck>();
+
+        if (boxCheck1 == null)
+        {
+            Debug.LogError("BoxCheck1 がシーン内に存在しません！");
+        }
+        else
+        {
+            Debug.Log("BoxCheck1はシーン内に存在します！");
+        }
     }
+
 
     void Update()
     {
@@ -37,6 +48,7 @@ public class ItemInteraction : MonoBehaviour
             if (Input.GetButtonDown("Y_Button_1P") && isHoldingItem)
             {
                 TryPlaceItemInBox();
+           
             }
         }
 
@@ -62,6 +74,7 @@ public class ItemInteraction : MonoBehaviour
             if (Input.GetButtonDown("Y_Button_2P") && isHoldingItem)
             {
                 TryPlaceItemInBox();
+                
             }
         }
     }

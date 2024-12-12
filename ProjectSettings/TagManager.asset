@@ -19,6 +19,7 @@ TagManager:
   - ' Yellow mush'
   - Blue mush
   - Red mush
+  - Yellow mush
   layers:
   - Default
   - TransparentFX

@@ -46,7 +46,7 @@ public class PlayerItemRespawn : MonoBehaviour
         if (isRespawnTriggered && timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
-            Debug.Log("Remaining Time: " + timeRemaining);
+            //Debug.Log("Remaining Time: " + timeRemaining);
         }
         else if (timeRemaining <= 0 && isRespawnTriggered)
         {
