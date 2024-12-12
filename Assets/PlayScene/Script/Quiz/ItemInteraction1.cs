@@ -1,17 +1,16 @@
 using UnityEngine;
 
-public class ItemInteraction : MonoBehaviour
+public class ItemInteraction1 : MonoBehaviour
 {
     public Transform holdPosition;  // プレイヤーがアイテムを持つ位置
     private GameObject heldItem;    // 持っているアイテム
     public LayerMask itemLayer;     // アイテムのレイヤーマスク
-    private BoxCheck boxCheck;      // ボックスをチェックするための参照
     private BoxCheck1 boxCheck1;
     private bool isHoldingItem = false;  // アイテムを持っているかどうかを判定するフラグ
 
     void Start()
     {
-        boxCheck = FindObjectOfType<BoxCheck>();
+        boxCheck1 = FindObjectOfType<BoxCheck1>();
 
         if (boxCheck1 == null)
         {
@@ -35,20 +34,20 @@ public class ItemInteraction : MonoBehaviour
                 if (!isHoldingItem)
                 {
                     // アイテムを持っていない場合、拾う操作を行う
-                    TryPickUpItem();
+                    TryPickUpItem1();
                 }
                 else
                 {
                     // アイテムを持っている場合、アイテムを落とす
-                    DropItem();
+                    DropItem1();
                 }
             }
 
             // アイテムをボックスに入れる操作（Yボタン）
             if (Input.GetButtonDown("Y_Button_1P") && isHoldingItem)
             {
-                TryPlaceItemInBox();
-           
+                TryPlaceItemInBox1(); 
+
             }
         }
 
@@ -61,25 +60,25 @@ public class ItemInteraction : MonoBehaviour
                 if (!isHoldingItem)
                 {
                     // アイテムを持っていない場合、拾う操作を行う
-                    TryPickUpItem();
+                    TryPickUpItem1();
                 }
                 else
                 {
                     // アイテムを持っている場合、アイテムを落とす
-                    DropItem();
+                    DropItem1();
                 }
             }
 
             // アイテムをボックスに入れる操作（Yボタン）
             if (Input.GetButtonDown("Y_Button_2P") && isHoldingItem)
             {
-                TryPlaceItemInBox();
-                
+                TryPlaceItemInBox1();
+
             }
         }
     }
 
-    void TryPickUpItem()
+    void TryPickUpItem1()
     {
         // アイテムを拾う判定: プレイヤーの位置を基準にRaycastでアイテムを検出
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right, 1f, itemLayer);
@@ -100,13 +99,13 @@ public class ItemInteraction : MonoBehaviour
         }
     }
 
-    void TryPlaceItemInBox()
+    void TryPlaceItemInBox1()
     {
         // ボックスにアイテムを配置: プレイヤーの持つ位置を基準に
         Collider2D boxCollider = Physics2D.OverlapCircle(holdPosition.position, 1f, LayerMask.GetMask("Box"));
         if (boxCollider != null)
         {
-            boxCheck.CheckItem(heldItem);  // アイテムをボックスに入れる処理
+            boxCheck1.CheckItem1(heldItem);  // アイテムをボックスに入れる処理
             Destroy(heldItem);  // アイテムを破壊（配置後）
             heldItem = null;
             isHoldingItem = false;  // アイテムを手放した状態にする
@@ -117,7 +116,7 @@ public class ItemInteraction : MonoBehaviour
         }
     }
 
-    void DropItem()
+    void DropItem1()
     {
         // アイテムを親オブジェクトから切り離す
         heldItem.transform.SetParent(null);

@@ -4,7 +4,7 @@ public class Question : MonoBehaviour
 {
     private QuizManager quizManager;
     private QuizManager.QuestionAnswerPair currentQuestion;
-
+     
     // ここに正解のタグを格納するためのフィールドを追加
     public string correctItemTag;  // 追加
 

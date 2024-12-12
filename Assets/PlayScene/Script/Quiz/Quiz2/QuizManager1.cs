@@ -9,7 +9,7 @@ public class QuizManager1 : MonoBehaviour
     {
         public int questionNumber;       // 問題番号
         public GameObject questionObject;  // 問題オブジェクト（例えば3DオブジェクトやUI）
-        public string correctAnswerTag;    // 正解のアイテムのタグ（文字列で設定）
+        public string correctAnswer1Tag;    // 正解のアイテムのタグ（文字列で設定）
     }
 
     public QuestionAnswerPair[] questionAnswerPairs;  // 問題と解答のペアの配列
@@ -34,34 +34,34 @@ public class QuizManager1 : MonoBehaviour
     void Start()
     {
         // ランダムな問題を設定
-        SetRandomQuestion();
+        SetRandomQuestion1();
 
         // ランダムな問題番号を決定してRangeCheckerに送信
-        Debug.Log("今の数字は→" + randomIndex);
+        Debug.Log("今の数字(2)は→" + randomIndex);
 
         // プレイヤー1とプレイヤー2に異なる画像を渡す
-        rangeChecker.SetCurrentQuestionObject(1, rangeChecker.imageObjectsPlayer1[randomIndex]);  // プレイヤー1に選ばれた画像を送信
-        rangeChecker.SetCurrentQuestionObject(2, rangeChecker.imageObjectsPlayer2[randomIndex]);  // プレイヤー2に選ばれた画像を送信
+        rangeChecker.SetCurrentQuestionObject1(1, rangeChecker.imageObjectsPlayer1[randomIndex]);  // プレイヤー1に選ばれた画像を送信
+        rangeChecker.SetCurrentQuestionObject1(2, rangeChecker.imageObjectsPlayer2[randomIndex]);  // プレイヤー2に選ばれた画像を送信
 
     }
 
     // ランダムな問題を選んで設定する
-    public void SetRandomQuestion()
+    public void SetRandomQuestion1()
     {
         randomIndex = Random.Range(0, questionAnswerPairs.Length);
         currentQuestion = questionAnswerPairs[randomIndex];  // 選んだ問題を設定
 
         // 問題をログに表示（デバッグ用）
-        Debug.Log($"QuizManagerの現在の問題は: {currentQuestion.questionObject.name}");
-        Debug.Log($"QuizManagerの正解タグは: {currentQuestion.correctAnswerTag}");
-        Debug.Log($"QuizManagerの問題番号は: {currentQuestion.questionNumber}");
+        Debug.Log($"QuizManager(2)の現在の問題は: {currentQuestion.questionObject.name}");
+        Debug.Log($"QuizManager(2)の正解タグは: {currentQuestion.correctAnswer1Tag}");
+        Debug.Log($"QuizManager(2)の問題番号は: {currentQuestion.questionNumber}");
     }
 
     // 解答をチェックするメソッド
-    public bool CheckAnswer(string itemTag)
+    public bool CheckAnswer1(string itemTag)
     {
         // アイテムのタグが正解のタグと一致するかを確認
-        if (itemTag == currentQuestion.correctAnswerTag)
+        if (itemTag == currentQuestion.correctAnswer1Tag)
         {
             Debug.Log("正解!");
             return true;  // 正解
@@ -74,7 +74,7 @@ public class QuizManager1 : MonoBehaviour
     }
 
     // 現在の問題を返す
-    public QuestionAnswerPair GetCurrentQuestion()
+    public QuestionAnswerPair GetCurrentQuestion1()
     {
         return currentQuestion;
     }

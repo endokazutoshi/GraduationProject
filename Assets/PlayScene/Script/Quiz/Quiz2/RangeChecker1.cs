@@ -50,8 +50,8 @@ public class RangeChecker1 : MonoBehaviour
         }
 
         // 画像を非表示に設定
-        HideAllImages(imageObjectsPlayer1);
-        HideAllImages(imageObjectsPlayer2);
+        HideAllImages1(imageObjectsPlayer1);
+        HideAllImages1(imageObjectsPlayer2);
 
         // Display 2を有効化
 
@@ -76,17 +76,17 @@ public class RangeChecker1 : MonoBehaviour
 
 
 
-        bool isPlayer1InRange = IsPlayerInRange(player1Object);//範囲内かの判定
-        bool isPlayer2InRange = IsPlayerInRange(player2Object);//範囲内かの判定
+        bool isPlayer1InRange = IsPlayerInRange1(player1Object);//範囲内かの判定
+        bool isPlayer2InRange = IsPlayerInRange1(player2Object);//範囲内かの判定
 
 
         // プレイヤー1とプレイヤー2の画像表示を統一したメソッドで処理
-        HandlePlayerImageDisplay(player1Object, isPlayer1InRange, selectedImagePlayer1, ref mainCamera, 0, "Y_Button_1P",player1Text,0);
-        HandlePlayerImageDisplay(player2Object, isPlayer2InRange, selectedImagePlayer2, ref secondCamera, 1, "Y_Button_2P",player2Text,1);
+        HandlePlayerImageDisplay1(player1Object, isPlayer1InRange, selectedImagePlayer1, ref mainCamera, 0, "Y_Button_1P",player1Text,0);
+        HandlePlayerImageDisplay1(player2Object, isPlayer2InRange, selectedImagePlayer2, ref secondCamera, 1, "Y_Button_2P",player2Text,1);
     }
 
     // 現在選ばれている問題番号に基づいて画像を更新する
-    public void SetCurrentQuestionObject(int player, GameObject questionObject)
+    public void SetCurrentQuestionObject1(int player, GameObject questionObject)
     {
         if (player == 1)
         {
@@ -107,38 +107,38 @@ public class RangeChecker1 : MonoBehaviour
     }
 
     // プレイヤーごとの画像表示処理
-    private void HandlePlayerImageDisplay(GameObject playerObject, bool isPlayerInRange, GameObject selectedImage, ref Camera camera, int displayIndex, string buttonName, GameObject textObject, int textDisplayIndex)
+    private void HandlePlayerImageDisplay1(GameObject playerObject, bool IsPlayerInRange1, GameObject selectedImage, ref Camera camera, int displayIndex, string buttonName, GameObject textObject, int textDisplayIndex)
     {
         if (playerObject == null || selectedImage == null) return;
 
         bool isImageVisible = selectedImage.activeSelf;
 
         // プレイヤーが範囲内にいて対応ボタンが押された場合
-        if (isPlayerInRange && Input.GetButtonDown(buttonName))
+        if (IsPlayerInRange1 && Input.GetButtonDown(buttonName))
         {
-            ToggleImage(selectedImage, ref isImageVisible);
+            ToggleImage1(selectedImage, ref isImageVisible);
             if (camera != null)
             {
                 camera.targetDisplay = displayIndex; // 対応するディスプレイに切り替え
             }
         }
         // プレイヤーが範囲外に出た場合、画像を非表示にする
-        else if (!isPlayerInRange && isImageVisible)
+        else if (!IsPlayerInRange1 && isImageVisible)
         {
-            HideAllImages(new GameObject[] { selectedImage });
+            HideAllImages1(new GameObject[] { selectedImage });
         }
         // プレイヤーが範囲内にいる場合、対応するテキストを表示
-        if (isPlayerInRange)
+        if (IsPlayerInRange1)
         {
             if (textObject != null)
             {
-                DisplayOnSpecificMonitor(textObject, textDisplayIndex); // 指定されたディスプレイに表示
+                DisplayOnSpecificMonitor1(textObject, textDisplayIndex); // 指定されたディスプレイに表示
             }
         }
         // プレイヤーが範囲外に出た場合、画像とテキストを非表示にする
         else
         {
-            HideAllImages(new GameObject[] { selectedImage });
+            HideAllImages1(new GameObject[] { selectedImage });
 
             if (textObject != null)
             {
@@ -148,7 +148,7 @@ public class RangeChecker1 : MonoBehaviour
     }
 
     // 指定されたプレイヤーが範囲内にいるか判定する
-    private bool IsPlayerInRange(GameObject playerObject)
+    private bool IsPlayerInRange1(GameObject playerObject)
     {
         if (playerObject == null || rangeCollider == null) return false;
 
@@ -159,7 +159,7 @@ public class RangeChecker1 : MonoBehaviour
     }
 
     // 画像の表示と非表示を切り替える
-    private void ToggleImage(GameObject imageObject, ref bool isVisible)
+    private void ToggleImage1(GameObject imageObject, ref bool isVisible)
     {
         if (imageObject != null)
         {
@@ -169,7 +169,7 @@ public class RangeChecker1 : MonoBehaviour
     }
 
     // すべての画像を非表示にする
-    private void HideAllImages(GameObject[] imageObjects)
+    private void HideAllImages1(GameObject[] imageObjects)
     {
         foreach (var imageObject in imageObjects)
         {
@@ -181,7 +181,7 @@ public class RangeChecker1 : MonoBehaviour
     }
     // 特定のディスプレイにテキストを表示する
     // 特定のディスプレイにテキストを表示する
-    private void DisplayOnSpecificMonitor(GameObject textObject, int displayIndex)
+    private void DisplayOnSpecificMonitor1(GameObject textObject, int displayIndex)
     {
         if (textObject == null) return;
 
