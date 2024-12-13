@@ -8,7 +8,7 @@ public class PlayerItemRespawn1 : MonoBehaviour
     public float respawnTime = 3.0f;  // アイテムがリスポーンするまでの時間
     private float timeRemaining;  // 残り時間
     public float x, y; //リスポーンの座標
-
+    public string ItemtagName; //アイテムの名前
     // プレイヤー1とプレイヤー2のタグ名
     public string player1Tag = "Player1";
     //public string player2Tag = "Player2";
@@ -52,7 +52,7 @@ public class PlayerItemRespawn1 : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         // プレイヤー1がItemレイヤー内に入ったとき、範囲内フラグをセット
-        if (other.gameObject.layer == LayerMask.NameToLayer("Item"))
+        if (other.CompareTag(ItemtagName))
         {
             Debug.Log("プレイヤー1がItemレイヤー内に入った！");
             isPlayer1InItemLayer = true;
@@ -64,7 +64,7 @@ public class PlayerItemRespawn1 : MonoBehaviour
     {
         Debug.Log("other"+other);
         // プレイヤー1がItemレイヤーから出たとき、範囲内フラグをリセット
-        if (other.gameObject.layer == LayerMask.NameToLayer("Item"))
+        if (other.CompareTag(ItemtagName))
         {
             Debug.Log("プレイヤー1がItemレイヤーから出た！");
             isPlayer1InItemLayer = false;
