@@ -12,8 +12,8 @@ public class PlayerItemRespawn2 : MonoBehaviour
     // プレイヤー1とプレイヤー2のタグ名
    // public string player1Tag = "Player1";
     public string player2Tag = "Player2";
-
-   // private bool isPlayer1InItemLayer = false; // プレイヤーがItemレイヤー内にいるかどうか
+    public string ItemtagName; //アイテムの名前
+                               // private bool isPlayer1InItemLayer = false; // プレイヤーがItemレイヤー内にいるかどうか
     private bool isPlayer2InItemLayer = false; // プレイヤーがItemレイヤー内にいるかどうか
     private bool isRespawnTriggered = false; // リスポーンがトリガーされたかどうか
 
@@ -40,7 +40,7 @@ public class PlayerItemRespawn2 : MonoBehaviour
         if (isRespawnTriggered && timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
-            Debug.Log("Remaining Time: " + timeRemaining);
+            //Debug.Log("Remaining Time: " + timeRemaining);
         }
         else if (timeRemaining <= 0 && isRespawnTriggered)
         {
@@ -52,7 +52,7 @@ public class PlayerItemRespawn2 : MonoBehaviour
     {
 
         // プレイヤー2がItemレイヤー内に入ったとき、範囲内フラグをセット
-        if (other.gameObject.layer == LayerMask.NameToLayer("Item"))
+        if (other.CompareTag(ItemtagName))
         {
             Debug.Log("プレイヤー2がItemレイヤー内に入った！");
             isPlayer2InItemLayer = true;
@@ -64,7 +64,7 @@ public class PlayerItemRespawn2 : MonoBehaviour
         Debug.Log("other"+other);
         
         // プレイヤー2がItemレイヤーから出たとき、範囲内フラグをリセット
-        if (other.gameObject.layer == LayerMask.NameToLayer("Item"))
+        if (other.CompareTag(ItemtagName))
         {
             Debug.Log("プレイヤー2がItemレイヤーから出た！");
             isPlayer2InItemLayer = false;

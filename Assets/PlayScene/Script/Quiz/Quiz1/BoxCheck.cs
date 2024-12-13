@@ -183,7 +183,7 @@ public class BoxCheck : MonoBehaviour
         {
             Debug.Log("プレイヤー１が吹き飛びます");
             // プレイヤー1が不正解なら移動を無効化
-            playerMovement1.can_move = 1;
+            playerMovement1.can_move1 = 1;
             isBlown1 = true;
 
             // 吹き飛ばし方向と距離を決定
@@ -195,7 +195,7 @@ public class BoxCheck : MonoBehaviour
         {
             Debug.Log("プレイヤー2が吹き飛びます");
             // プレイヤー2が不正解なら移動を無効化
-            playerMovement2.can_move = 1;
+            playerMovement2.can_move1 = 1;
             isBlown2 = true;
 
             // 吹き飛ばし方向と距離を決定
@@ -222,12 +222,12 @@ public class BoxCheck : MonoBehaviour
         if (playerMovement1 != null)
         {
             // can_move を 0 に設定して移動を再許可
-            playerMovement1.can_move = 0;
+            playerMovement1.can_move1 = 0;
         }
         if (playerMovement2 != null)
         {
             // can_move を 0 に設定して移動を再許可
-            playerMovement2.can_move = 0;
+            playerMovement2.can_move1 = 0;
         }
 
         Debug.Log("タイマー終了。移動が再開されました。");
