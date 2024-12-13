@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ItemInteraction1 : MonoBehaviour
+public class ItemInteractio1 : MonoBehaviour
 {
     public Transform holdPosition;  // プレイヤーがアイテムを持つ位置
     private GameObject heldItem;    // 持っているアイテム
