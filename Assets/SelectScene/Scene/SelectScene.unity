@@ -836,6 +836,8 @@ GameObject:
   - component: {fileID: 881651731}
   - component: {fileID: 881651732}
   - component: {fileID: 881651733}
+  - component: {fileID: 881651735}
+  - component: {fileID: 881651734}
   m_Layer: 0
   m_Name: Player1Camera
   m_TagString: MCamera
@@ -969,6 +971,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageSelectController: {fileID: 881651732}
   selectSceneUI: {fileID: 0}
+--- !u!114 &881651734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881651727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ade93406676737847ad4def6717c8e41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObject: []
+  currentMapIndex: 1
+--- !u!114 &881651735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881651727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ade93406676737847ad4def6717c8e41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObject:
+  - {fileID: 1835434110}
+  - {fileID: 0}
+  - {fileID: 0}
+  currentMapIndex: 2
 --- !u!1001 &1451442853
 PrefabInstance:
   m_ObjectHideFlags: 0
