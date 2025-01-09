@@ -49,7 +49,7 @@ public class StagenotSelect : MonoBehaviour
     // 現在選択されている画像を表示し、他の画像を非表示にする
     private void UpdateMapSelection1()
     {
-        Debug.Log("現在のインデックス: " + currentMapIndex); // 現在のインデックスをデバッグで表示
+       // Debug.Log("現在のインデックス: " + currentMapIndex); // 現在のインデックスをデバッグで表示
 
         // すべてのマップオブジェクトを非表示にする
         for (int i = 0; i < targetObject.Length; i++)

@@ -3,14 +3,16 @@ using UnityEngine;
 public class StageSelectController : MonoBehaviour
 {
     public GameObject[] targetObject;  // 表示する画像オブジェクト（例えば、1, 2, 3の画像）
-    public int currentMapIndex = 0;   // 現在選択されている画像のインデックス
+    public GameObject[] targetText;   // 表示するテキストオブジェクト（画像に対応する説明文など）
+    public int currentMapIndex = 2;   // 現在選択されている画像のインデックス
 
     private bool isDpadPressed = false; // D-Padが押されたかどうかのフラグ
 
     void Start()
     {
-        // 初期状態で最初のマップのみ表示
+        // 初期状態で最初のマップとテキストのみ表示
         UpdateMapSelection();
+        UpdateTextSelection();
     }
 
     void Update()
@@ -24,6 +26,7 @@ public class StageSelectController : MonoBehaviour
                 currentMapIndex = targetObject.Length - 1;  // 循環させる（最初に戻る）
             }
             UpdateMapSelection();
+            UpdateTextSelection();
             isDpadPressed = true; // ボタンが押されたことを記録
         }
 
@@ -36,6 +39,7 @@ public class StageSelectController : MonoBehaviour
                 currentMapIndex = 0;  // 循環させる（最後から最初に戻る）
             }
             UpdateMapSelection();
+            UpdateTextSelection();
             isDpadPressed = true; // ボタンが押されたことを記録
         }
 
@@ -49,7 +53,7 @@ public class StageSelectController : MonoBehaviour
     // 現在選択されている画像を表示し、他の画像を非表示にする
     private void UpdateMapSelection()
     {
-        Debug.Log("現在のインデックス: " + currentMapIndex); // 現在のインデックスをデバッグで表示
+        // Debug.Log("現在のインデックス: " + currentMapIndex); // 現在のインデックスをデバッグで表示
 
         // すべてのマップオブジェクトを非表示にする
         for (int i = 0; i < targetObject.Length; i++)
@@ -61,11 +65,32 @@ public class StageSelectController : MonoBehaviour
         if (currentMapIndex >= 0 && currentMapIndex < targetObject.Length)
         {
             targetObject[currentMapIndex].SetActive(true);
-            //Debug.Log("選択されたオブジェクト: " + targetObject[currentMapIndex].name); // 表示されるオブジェクトを確認
+            // Debug.Log("選択されたオブジェクト: " + targetObject[currentMapIndex].name); // 表示されるオブジェクトを確認
         }
         else
         {
-            //Debug.LogWarning("インデックスが範囲外: " + currentMapIndex); // 範囲外のインデックスに注意
+            // Debug.LogWarning("インデックスが範囲外: " + currentMapIndex); // 範囲外のインデックスに注意
+        }
+    }
+
+    // 現在選択されているテキストを表示し、他のテキストを非表示にする
+    private void UpdateTextSelection()
+    {
+        // すべてのテキストオブジェクトを非表示にする
+        for (int i = 0; i < targetText.Length; i++)
+        {
+            targetText[i].SetActive(false);
+        }
+
+        // 現在選択されているインデックスのテキストオブジェクトを表示
+        if (currentMapIndex >= 0 && currentMapIndex < targetText.Length)
+        {
+            targetText[currentMapIndex].SetActive(true);
+            // Debug.Log("選択されたテキスト: " + targetText[currentMapIndex].name); // 表示されるテキストを確認
+        }
+        else
+        {
+            // Debug.LogWarning("テキストのインデックスが範囲外: " + currentMapIndex); // 範囲外のインデックスに注意
         }
     }
 }
