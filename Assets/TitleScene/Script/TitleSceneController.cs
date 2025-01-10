@@ -7,12 +7,14 @@ public class TitleSceneController : MonoBehaviour
 {
     public AudioClip buttonSound; // Aボタンを押した時の音
     public Image fadeImage;       // フェードアウト用のImage（黒色）
-    private AudioSource audioSource;
+    public Slider volumeSlider;   // 音量調整用のスライダー
 
+    private AudioSource audioSource;
     private bool isTransitioning = false; // 遷移中かどうかを確認するフラグ
 
     void Start()
     {
+        // AudioSourceの設定
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.clip = buttonSound;
         audioSource.playOnAwake = false;
@@ -23,6 +25,13 @@ public class TitleSceneController : MonoBehaviour
             var color = fadeImage.color;
             color.a = 0;
             fadeImage.color = color;
+        }
+
+        // 音量スライダーの初期設定
+        if (volumeSlider != null)
+        {
+            volumeSlider.value = audioSource.volume; // 現在の音量をスライダーに設定
+            volumeSlider.onValueChanged.AddListener(OnVolumeChanged); // 音量変更時に呼ばれるイベントを設定
         }
     }
 
@@ -75,6 +84,15 @@ public class TitleSceneController : MonoBehaviour
             var finalColor = fadeImage.color;
             finalColor.a = 1;
             fadeImage.color = finalColor;
+        }
+    }
+
+    // スライダーで音量が変更されたときに呼ばれるメソッド
+    private void OnVolumeChanged(float value)
+    {
+        if (audioSource != null)
+        {
+            audioSource.volume = value; // 音量をスライダーの値に設定
         }
     }
 }
