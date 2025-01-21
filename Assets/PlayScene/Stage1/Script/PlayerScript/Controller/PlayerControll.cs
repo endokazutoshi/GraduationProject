@@ -5,9 +5,11 @@ public class PlayerMovement : MonoBehaviour
     public int can_move1 = 0;  // 'can_move' を public にして直接アクセス可能にする
     public int can_move2 = 0;
     public float speed_H = 5f; // 水平移動速度
+    public float dragFactor = 0.98f;  // 滑り具合を制御するための減衰係数
     private Animator anime;
 
     private Rigidbody2D rbody2D;
+    private bool isOnFrozenSurface = false;  // Frozenタグにいるかどうかのフラグ
 
     private void Start()
     {
@@ -39,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     anime.SetBool("Jump", false);
                 }
+
                 // スティックが右に動いているか
                 if (moveInput_H > 0.1f)
                 {
@@ -73,6 +76,15 @@ public class PlayerMovement : MonoBehaviour
             {
                 moveInput_H = Input.GetAxis("L_Stick_H_2P");
 
+                if (Input.GetButton("Jump_P2"))
+                {
+                    anime.SetBool("Jump", true);
+                }
+                else
+                {
+                    anime.SetBool("Jump", false);
+                }
+
                 // スティックが右に動いているか
                 if (moveInput_H > 0.1f)
                 {
@@ -104,7 +116,22 @@ public class PlayerMovement : MonoBehaviour
             }
 
             // 横移動（Rigidbody2Dの速度を変更）
-            rbody2D.velocity = new Vector2(moveInput_H * speed_H, rbody2D.velocity.y);
+            if (Mathf.Abs(moveInput_H) > 0.1f) // スティックが動いているとき
+            {
+                rbody2D.velocity = new Vector2(moveInput_H * speed_H, rbody2D.velocity.y);
+            }
+            else // スティックが動いていないとき
+            {
+                if (isOnFrozenSurface)  // Frozenタグにいる場合だけ滑らせる
+                {
+                    // 横方向の速度を少しずつ減速させて滑る動きを実現
+                    rbody2D.velocity = new Vector2(rbody2D.velocity.x * dragFactor, rbody2D.velocity.y);
+                }
+                else
+                {
+                    rbody2D.velocity = new Vector2(0, rbody2D.velocity.y); // 動かない場合は速度を0にする
+                }
+            }
         }
         else
         {
@@ -112,15 +139,23 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("移動できません");
         }
     }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        // "Frozen" タグに触れている場合、滑るフラグをオンにする
+        if (collision.gameObject.CompareTag("Frozen"))
+        {
+            Debug.Log("氷に触れています");
+            isOnFrozenSurface = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        // "Frozen" タグから離れた場合、滑るフラグをオフにする
+        if (collision.gameObject.CompareTag("Frozen"))
+        {
+            isOnFrozenSurface = false;
+        }
+    }
 }
-
-
-//if (CompareTag("Player2") && Input.GetButtonDown("Jump_P2"))
-//{
-//    anime.SetBool("Jump", true);
-//    StartJump();
-//}
-//else if (CompareTag("Player2") && Input.GetButtonUp("Jump_P2"))
-//{
-//    anime.SetBool("Jump", false);
-//}
