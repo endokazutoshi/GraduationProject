@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class QuizManager1 : MonoBehaviour
+public class QuizManager2 : MonoBehaviour
 {
-    public static QuizManager1 Instance;  // Singletonインスタンス
+    public static QuizManager2 Instance;  // Singletonインスタンス
 
     [System.Serializable]
     public class QuestionAnswerPair
@@ -15,7 +15,7 @@ public class QuizManager1 : MonoBehaviour
     public QuestionAnswerPair[] questionAnswerPairs;  // 問題と解答のペアの配列
 
     private QuestionAnswerPair currentQuestion;  // 現在の問題と正解のペア
-    private RangeChecker1 rangeChecker;  // RangeCheckerの参照
+    private RangeChecker2 rangeChecker;  // RangeCheckerの参照
 
     public int randomIndex;
 
@@ -28,25 +28,25 @@ public class QuizManager1 : MonoBehaviour
         }
 
         // RangeCheckerの参照をAwakeで取得
-        rangeChecker = FindObjectOfType<RangeChecker1>();
+        rangeChecker = FindObjectOfType<RangeChecker2>();
     }
 
     void Start()
     {
         // ランダムな問題を設定
-        SetRandomQuestion1();
+        SetRandomQuestion2();
 
         // ランダムな問題番号を決定してRangeCheckerに送信
         Debug.Log("今の数字(2)は→" + randomIndex);
 
         // プレイヤー1とプレイヤー2に異なる画像を渡す
-        rangeChecker.SetCurrentQuestionObject1(1, rangeChecker.imageObjectsPlayer1[randomIndex]);  // プレイヤー1に選ばれた画像を送信
-        rangeChecker.SetCurrentQuestionObject1(2, rangeChecker.imageObjectsPlayer2[randomIndex]);  // プレイヤー2に選ばれた画像を送信
+        rangeChecker.SetCurrentQuestionObject2(1, rangeChecker.imageObjectsPlayer1[randomIndex]);  // プレイヤー1に選ばれた画像を送信
+        rangeChecker.SetCurrentQuestionObject2(2, rangeChecker.imageObjectsPlayer2[randomIndex]);  // プレイヤー2に選ばれた画像を送信
 
     }
 
     // ランダムな問題を選んで設定する
-    public void SetRandomQuestion1()
+    public void SetRandomQuestion2()
     {
         randomIndex = Random.Range(0, questionAnswerPairs.Length);
         currentQuestion = questionAnswerPairs[randomIndex];  // 選んだ問題を設定
@@ -58,7 +58,7 @@ public class QuizManager1 : MonoBehaviour
     }
 
     // 解答をチェックするメソッド
-    public bool CheckAnswer1(string itemTag)
+    public bool CheckAnswer2(string itemTag)
     {
         // アイテムのタグが正解のタグと一致するかを確認
         if (itemTag == currentQuestion.correctAnswer1Tag)
@@ -74,7 +74,7 @@ public class QuizManager1 : MonoBehaviour
     }
 
     // 現在の問題を返す
-    public QuestionAnswerPair GetCurrentQuestion1()
+    public QuestionAnswerPair GetCurrentQuestion2()
     {
         return currentQuestion;
     }
