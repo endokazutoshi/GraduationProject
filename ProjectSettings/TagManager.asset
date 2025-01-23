@@ -22,6 +22,31 @@ TagManager:
   - Emerald key
   - ' Yellow mush'
   - Frozen
+  - cane 1
+  - cane 2
+  - cane 3
+  - cane 4
+  - cane 5
+  - sword 1
+  - sword 2
+  - sword 3
+  - sword 4
+  - sword 5
+  - sword 6
+  - sword 7
+  - sword 8
+  - sword 9
+  - sword 10
+  - bow 1
+  - bow 2
+  - bow 3
+  - bow 4
+  - bow 5
+  - bow 6
+  - bow 7
+  - bow 8
+  - bow 9
+  - bow 10
   layers:
   - Default
   - TransparentFX
