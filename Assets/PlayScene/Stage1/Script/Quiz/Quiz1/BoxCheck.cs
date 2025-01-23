@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections;
 public class BoxCheck : MonoBehaviour
 {
     private QuizManager quizManager;
@@ -7,9 +7,11 @@ public class BoxCheck : MonoBehaviour
     public GameObject targetObject;
     public GameObject targetObject2;
 
+    public GameObject openUI1;
+    public GameObject openUI2;
+
     public GameObject targetPlayer1;  // プレイヤー1
     public GameObject targetPlayer2;  // プレイヤー2
-
 
     public float timerDuration = 2f;  // 操作不能にさせる秒数
     private float currentTime;
@@ -24,24 +26,24 @@ public class BoxCheck : MonoBehaviour
 
     private float blowTime = 0f;    // 吹き飛ばしにかかる時間
     float speedFactor = 20f;  // 速さを倍にする（調整可能）
-    bool canPlayer1 = false;//プレイヤーが触れているかの確認
-    bool canPlayer2 = false;//プレイヤーが触れているかの確認
+    bool canPlayer1 = false; // プレイヤーが触れているかの確認
+    bool canPlayer2 = false; // プレイヤーが触れているかの確認
 
     public GameObject player1Text;  // プレイヤー1用
     public GameObject player2Text;  // プレイヤー2用
     public float textDisplayDuration = 2f;  // テキストを表示する時間
-
 
     void Start()
     {
         quizManager = FindObjectOfType<QuizManager>();
         targetObject.SetActive(false);
         targetObject2.SetActive(false);
+        openUI1.SetActive(false);
+        openUI2.SetActive(false);
         currentTime = 0f;  // 初期化時にタイマーは0に設定しておく
         // 初期状態ではテキストを非表示にしておく
         if (player1Text != null) player1Text.SetActive(false);
         if (player2Text != null) player2Text.SetActive(false);
-
     }
 
     void Update()
@@ -49,35 +51,29 @@ public class BoxCheck : MonoBehaviour
         // 吹き飛ばし処理
         if (isBlown1)
         {
-            // プレイヤー1を吹き飛ばす
             targetPlayer1.transform.position = Vector2.Lerp(targetPlayer1.transform.position, targetPosition1, blowTime * Time.deltaTime);
-            // 目的地に到達したら移動を停止
             if (Vector2.Distance(targetPlayer1.transform.position, targetPosition1) < 0.1f)
             {
                 isBlown1 = false;  // プレイヤー1の吹き飛ばしが終了
             }
         }
+
         if (isBlown2)
         {
-            // プレイヤー2を吹き飛ばす
             targetPlayer2.transform.position = Vector2.Lerp(targetPlayer2.transform.position, targetPosition2, blowTime * Time.deltaTime);
-            // 目的地に到達したら移動を停止
             if (Vector2.Distance(targetPlayer2.transform.position, targetPosition2) < 0.1f)
             {
                 isBlown2 = false;  // プレイヤー2の吹き飛ばしが終了
             }
         }
 
-
-
         // 吹き飛ばし時間を進める
-        blowTime += Time.deltaTime * speedFactor;  // speedFactorを掛けて速く進行させる
+        blowTime += Time.deltaTime * speedFactor;
 
         // タイマーが減少する
         if (currentTime > 0)
         {
-            currentTime -= Time.deltaTime;  // タイマーを減少
-                                            // Debug.Log("タイマー残り時間: " + currentTime);  // デバッグログでタイマー残り時間を表示
+            currentTime -= Time.deltaTime;
         }
         else if (currentTime <= 0)
         {
@@ -116,7 +112,6 @@ public class BoxCheck : MonoBehaviour
                     Debug.Log("Player 2's Bボタンが押されました！");
                     IncorrectAnswer("Player2");
                 }
-
             }
         }
         else
@@ -124,6 +119,7 @@ public class BoxCheck : MonoBehaviour
             Debug.LogError("現在の問題がありません");
         }
     }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         // プレイヤー1のタグを確認
@@ -131,22 +127,16 @@ public class BoxCheck : MonoBehaviour
         {
             canPlayer1 = true;  // プレイヤーが触れたらBボタンが効くようにする
             Debug.Log("プレイヤー1がオブジェクトに触れました！");
-            // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
-            // プレイヤー1用テキストを表示
             player1Text.SetActive(true);
-
         }
         if (other.CompareTag("Player2"))
         {
             canPlayer2 = true;  // プレイヤーが触れたらBボタンが効くようにする
             Debug.Log("プレイヤー2がオブジェクトに触れました！");
-            // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
-            // プレイヤー2用テキストを表示
             player2Text.SetActive(true);
-
         }
-
     }
+
     void OnTriggerExit2D(Collider2D other)
     {
         // プレイヤー1のタグを確認
@@ -154,21 +144,36 @@ public class BoxCheck : MonoBehaviour
         {
             canPlayer1 = false;  // プレイヤーが触れたらBボタンが効くようにする
             Debug.Log("プレイヤー1がオブジェクトから離れました！");
-            // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
             player1Text.SetActive(false);
         }
         if (other.CompareTag("Player2"))
         {
             canPlayer2 = false;  // プレイヤーが触れたらBボタンが効くようにする
             Debug.Log("プレイヤー2がオブジェクトから離れました！");
-            // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
             player2Text.SetActive(false);
         }
     }
+
+    // UI表示後に3秒で消すためのコルーチン
+    IEnumerator HideUIAfterDelay()
+    {
+        // 3秒待つ
+        yield return new WaitForSeconds(3f);
+
+        // UIを非表示にする
+        openUI1.SetActive(false);
+        openUI2.SetActive(false);
+    }
+
     void CorrectAnswer()
     {
         targetObject.SetActive(true);
         targetObject2.SetActive(true);
+        openUI1.SetActive(true);
+        openUI2.SetActive(true);
+
+        // コルーチンを開始して3秒後にUIを消す
+        StartCoroutine(HideUIAfterDelay());
     }
 
     void IncorrectAnswer(string playerTag)
@@ -204,15 +209,10 @@ public class BoxCheck : MonoBehaviour
             targetPosition2 = (Vector2)targetPlayer2.transform.position + forceDirection2 * blowDistance;
         }
 
-
-
         blowTime = 0f;  // 吹き飛ばしの時間をリセット
-
-        // タイマー開始
         currentTime = timerDuration;  // タイマーを開始
         Debug.Log("タイマー開始: " + currentTime);
     }
-
 
     void TimerEnded()
     {
@@ -221,12 +221,10 @@ public class BoxCheck : MonoBehaviour
 
         if (playerMovement1 != null)
         {
-            // can_move を 0 に設定して移動を再許可
             playerMovement1.can_move1 = 0;
         }
         if (playerMovement2 != null)
         {
-            // can_move を 0 に設定して移動を再許可
             playerMovement2.can_move1 = 0;
         }
 
@@ -235,17 +233,4 @@ public class BoxCheck : MonoBehaviour
         // タイマーをリセット
         currentTime = 0;  // タイマーをリセット
     }
-
-    // プレイヤー1のテキストを非表示
-    private void HidePlayer1Text()
-    {
-        if (player1Text != null) player1Text.SetActive(false);
-    }
-
-    // プレイヤー2のテキストを非表示
-    private void HidePlayer2Text()
-    {
-        if (player2Text != null) player2Text.SetActive(false);
-    }
-
 }
