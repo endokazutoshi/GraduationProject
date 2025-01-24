@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 public class BoxCheck : MonoBehaviour
 {
     private QuizManager quizManager;
@@ -33,6 +34,9 @@ public class BoxCheck : MonoBehaviour
     public GameObject player2Text;  // プレイヤー2用
     public float textDisplayDuration = 2f;  // テキストを表示する時間
 
+    private Camera mainCamera;                      // プレイヤー1用カメラ
+    private Camera secondCamera;                    // プレイヤー2用カメラ
+
     void Start()
     {
         quizManager = FindObjectOfType<QuizManager>();
@@ -44,6 +48,40 @@ public class BoxCheck : MonoBehaviour
         // 初期状態ではテキストを非表示にしておく
         if (player1Text != null) player1Text.SetActive(false);
         if (player2Text != null) player2Text.SetActive(false);
+
+        // タグでカメラを探して設定
+        GameObject cameraObject = GameObject.FindGameObjectWithTag("MCamera");
+        if (cameraObject != null)
+        {
+            mainCamera = cameraObject.GetComponent<Camera>();
+        }
+
+        GameObject cameraObject2 = GameObject.FindGameObjectWithTag("SCamera");
+        if (cameraObject2 != null)
+        {
+            secondCamera = cameraObject2.GetComponent<Camera>();
+        }
+
+        // Display 1,2を有効化
+
+        // Display 2を有効
+
+        if (Display.displays.Length > 0)
+        {
+            Display.displays[0].Activate(); // Display1
+            Debug.Log("Display 1 Active: " + Display.displays[0].active);
+        }
+        if (Display.displays.Length > 1)
+        {
+            Display.displays[1].Activate(); // Display2
+            Debug.Log("Display 2 Active: " + Display.displays[1].active);
+        }
+        // UIのカメラ設定
+        //SetUIForDisplay();
+        Debug.Log("Display 0 active: " + Display.displays[0].active);
+        Debug.Log("Display 1 active: " + Display.displays[1].active);
+
+
     }
 
     void Update()
@@ -163,6 +201,7 @@ public class BoxCheck : MonoBehaviour
         // UIを非表示にする
         openUI1.SetActive(false);
         openUI2.SetActive(false);
+
     }
 
     void CorrectAnswer()
@@ -171,6 +210,8 @@ public class BoxCheck : MonoBehaviour
         targetObject2.SetActive(true);
         openUI1.SetActive(true);
         openUI2.SetActive(true);
+        Debug.Log("openUI1 active: " + openUI1.activeSelf);
+        Debug.Log("openUI2 active: " + openUI2.activeSelf);
 
         // コルーチンを開始して3秒後にUIを消す
         StartCoroutine(HideUIAfterDelay());
@@ -213,6 +254,40 @@ public class BoxCheck : MonoBehaviour
         currentTime = timerDuration;  // タイマーを開始
         Debug.Log("タイマー開始: " + currentTime);
     }
+    //void SetUIForDisplay()
+    //{
+    //    // openUI1のCanvas設定
+    //    if (openUI1 != null)
+    //    {
+    //        Canvas canvas1 = openUI1.GetComponent<Canvas>();
+    //        if (canvas1 != null)
+    //        {
+    //            canvas1.renderMode = RenderMode.ScreenSpaceCamera;
+    //            canvas1.worldCamera = mainCamera;  // Display 1 用カメラを設定
+    //            canvas1.targetDisplay = 0;  // Display 1に表示
+    //            Debug.Log("Canvas 1 targetDisplay: " + canvas1.targetDisplay);
+
+    //        }
+    //    }
+
+    //    // openUI2のCanvas設定
+    //    if (openUI2 != null)
+    //    {
+    //        Canvas canvas2 = openUI2.GetComponent<Canvas>();
+    //        if (canvas2 != null)
+    //        {
+    //            canvas2.renderMode = RenderMode.ScreenSpaceCamera;
+    //            canvas2.worldCamera = secondCamera;  // Display 2 用カメラを設定
+    //            canvas2.targetDisplay = 1;  // Display 2に表示
+    //            Debug.Log("Canvas 2 targetDisplay: " + canvas2.targetDisplay);
+
+    //        }
+    //    }
+       
+
+    //}
+
+
 
     void TimerEnded()
     {
