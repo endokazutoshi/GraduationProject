@@ -228,7 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f04a785d4b97ff44903d01b4eb76677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonSound: {fileID: 8300000, guid: 8a098fa0ebaefa24cbf0839b4e0e7c04, type: 3}
+  buttonSound: {fileID: 8300000, guid: 257fbc3848959544eb6931090816eae2, type: 3}
   fadeImage: {fileID: 0}
   volumeSlider: {fileID: 0}
 --- !u!1 &477656244
