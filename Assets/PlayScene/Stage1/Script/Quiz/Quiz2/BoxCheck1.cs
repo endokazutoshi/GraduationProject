@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class BoxCheck1 : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class BoxCheck1 : MonoBehaviour
 
     public GameObject targetPlayer1;  // プレイヤー1
     public GameObject targetPlayer2;  // プレイヤー2
+    public GameObject openUI1;
+    public GameObject openUI2;
 
 
     public float timerDuration = 2f;  // 操作不能にさせる秒数
@@ -31,6 +34,9 @@ public class BoxCheck1 : MonoBehaviour
     public GameObject player2Text;  // プレイヤー2用
     public float textDisplayDuration = 2f;  // テキストを表示する時間
 
+    private Camera mainCamera;                      // プレイヤー1用カメラ
+    private Camera secondCamera;                    // プレイヤー2用カメラ
+
 
     void Start()
     {
@@ -41,6 +47,38 @@ public class BoxCheck1 : MonoBehaviour
         // 初期状態ではテキストを非表示にしておく
         if (player1Text != null) player1Text.SetActive(false);
         if (player2Text != null) player2Text.SetActive(false);
+
+        // タグでカメラを探して設定
+        GameObject cameraObject = GameObject.FindGameObjectWithTag("MCamera");
+        if (cameraObject != null)
+        {
+            mainCamera = cameraObject.GetComponent<Camera>();
+        }
+
+        GameObject cameraObject2 = GameObject.FindGameObjectWithTag("SCamera");
+        if (cameraObject2 != null)
+        {
+            secondCamera = cameraObject2.GetComponent<Camera>();
+        }
+
+        // Display 1,2を有効化
+
+        // Display 2を有効
+
+        if (Display.displays.Length > 0)
+        {
+            Display.displays[0].Activate(); // Display1
+            Debug.Log("Display 1 Active: " + Display.displays[0].active);
+        }
+        if (Display.displays.Length > 1)
+        {
+            Display.displays[1].Activate(); // Display2
+            Debug.Log("Display 2 Active: " + Display.displays[1].active);
+        }
+        // UIのカメラ設定
+        //SetUIForDisplay();
+        Debug.Log("Display 0 active: " + Display.displays[0].active);
+        Debug.Log("Display 1 active: " + Display.displays[1].active);
 
     }
 
@@ -165,10 +203,28 @@ public class BoxCheck1 : MonoBehaviour
             player2Text.SetActive(false);
         }
     }
+
+    IEnumerator HideUIAfterDelay1()
+    {
+        // 3秒待つ
+        yield return new WaitForSeconds(3f);
+
+        // UIを非表示にする
+        openUI1.SetActive(false);
+        openUI2.SetActive(false);
+
+    }
     void CorrectAnswer1()
     {
         targetObject.SetActive(true);
         targetObject2.SetActive(true);
+        openUI1.SetActive(true);
+        openUI2.SetActive(true);
+        Debug.Log("openUI1 active: " + openUI1.activeSelf);
+        Debug.Log("openUI2 active: " + openUI2.activeSelf);
+
+        // コルーチンを開始して3秒後にUIを消す
+        StartCoroutine(HideUIAfterDelay1());
     }
 
     void InCorrectAnswer1(string playerTag)
