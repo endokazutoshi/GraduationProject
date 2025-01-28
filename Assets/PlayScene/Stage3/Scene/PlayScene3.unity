@@ -9228,6 +9228,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetObject: {fileID: 421150986}
   targetObject2: {fileID: 721277925}
+  openUI1: {fileID: 0}
+  openUI2: {fileID: 0}
   targetPlayer1: {fileID: 0}
   targetPlayer2: {fileID: 0}
   timerDuration: 0.8
