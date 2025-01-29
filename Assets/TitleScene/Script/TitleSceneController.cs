@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class TitleSceneController : MonoBehaviour
 {
     public AudioClip buttonSound; // Aボタンを押した時の音
-    public Image fadeImage;       // フェードアウト用のImage（黒色）
+    public SpriteRenderer fadeSprite; // フェード用の黒いPNG（SpriteRenderer）
     public Slider volumeSlider;   // 音量調整用のスライダー
 
     private AudioSource audioSource;
@@ -19,12 +19,12 @@ public class TitleSceneController : MonoBehaviour
         audioSource.clip = buttonSound;
         audioSource.playOnAwake = false;
 
-        // フェード画像の初期設定（透明にする）
-        if (fadeImage != null)
+        // フェード画像の初期設定（透明にしておく）
+        if (fadeSprite != null)
         {
-            var color = fadeImage.color;
+            var color = fadeSprite.color;
             color.a = 0;
-            fadeImage.color = color;
+            fadeSprite.color = color;
         }
 
         // 音量スライダーの初期設定
@@ -55,7 +55,7 @@ public class TitleSceneController : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         // フェードアウトを開始
-        yield return StartCoroutine(FadeOut(2.5f));
+        yield return StartCoroutine(FadeOut(1f));
 
         // シーンを切り替え
         SceneManager.LoadScene("SelectScene");
@@ -63,9 +63,9 @@ public class TitleSceneController : MonoBehaviour
 
     private IEnumerator FadeOut(float duration)
     {
-        if (fadeImage != null)
+        if (fadeSprite != null)
         {
-            float startAlpha = fadeImage.color.a;
+            float startAlpha = fadeSprite.color.a;
             float time = 0;
 
             while (time < duration)
@@ -73,17 +73,12 @@ public class TitleSceneController : MonoBehaviour
                 time += Time.deltaTime;
                 float alpha = Mathf.Lerp(startAlpha, 1, time / duration);
 
-                var color = fadeImage.color;
+                var color = fadeSprite.color;
                 color.a = alpha;
-                fadeImage.color = color;
+                fadeSprite.color = color;
 
                 yield return null;
             }
-
-            // 確実にフェードを完了
-            var finalColor = fadeImage.color;
-            finalColor.a = 1;
-            fadeImage.color = finalColor;
         }
     }
 
