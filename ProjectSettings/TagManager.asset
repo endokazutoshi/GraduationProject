@@ -47,6 +47,7 @@ TagManager:
   - bow 8
   - bow 9
   - bow 10
+<<<<<<< HEAD
   - gear
   - oil
   - key
@@ -59,6 +60,13 @@ TagManager:
   - coal
   - hammer
   - keyholder
+=======
+  - red potion
+  - blue potion
+  - green potion
+  - pink potion
+  - yellow potion
+>>>>>>> 457e67c9d3fa27e4d656b1d61409a04f902c5b28
   layers:
   - Default
   - TransparentFX
