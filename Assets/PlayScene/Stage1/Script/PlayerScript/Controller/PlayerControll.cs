@@ -4,6 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public int can_move1 = 0;  // 'can_move' を public にして直接アクセス可能にする
     public int can_move2 = 0;
+    public int can_move3 = 0;
     public float speed_H = 5f; // 水平移動速度
     public float dragFactor = 0.98f;  // 滑り具合を制御するための減衰係数
     private Animator anime;
@@ -21,9 +22,10 @@ public class PlayerMovement : MonoBehaviour
     {
         Debug.Log("can_move1は" + can_move1);
         Debug.Log("can_move2は" + can_move2);
+        Debug.Log("can_move3は" + can_move3);
 
         // can_move が 0 の場合は移動を許可
-        if (can_move1 == 0 && can_move2 == 0)
+        if (can_move1 == 0 && can_move2 == 0 && can_move3 == 0)
         {
             float moveInput_H = 0f;  // 横方向の入力値
             Debug.Log("移動できます");
