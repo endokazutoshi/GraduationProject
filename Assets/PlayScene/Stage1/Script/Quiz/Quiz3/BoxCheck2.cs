@@ -10,7 +10,6 @@ public class BoxCheck2 : MonoBehaviour
 
     public GameObject targetPlayer1;  // プレイヤー1
     public GameObject targetPlayer2;  // プレイヤー2
-
     public GameObject openUI1;
     public GameObject openUI2;
 
@@ -47,42 +46,39 @@ public class BoxCheck2 : MonoBehaviour
         currentTime = 0f;  // 初期化時にタイマーは0に設定しておく
         // 初期状態ではテキストを非表示にしておく
         if (player1Text != null) player1Text.SetActive(false);
-        if (player2Text != null)
+        if (player2Text != null) player2Text.SetActive(false);
+
+        // タグでカメラを探して設定
+        GameObject cameraObject = GameObject.FindGameObjectWithTag("MCamera");
+        if (cameraObject != null)
         {
-            // タグでカメラを探して設定
-            GameObject cameraObject = GameObject.FindGameObjectWithTag("MCamera");
-            if (cameraObject != null)
-            {
-                mainCamera = cameraObject.GetComponent<Camera>();
-            }
-
-            GameObject cameraObject2 = GameObject.FindGameObjectWithTag("SCamera");
-            if (cameraObject2 != null)
-            {
-                secondCamera = cameraObject2.GetComponent<Camera>();
-            }
-
-            // Display 1,2を有効化
-
-            // Display 2を有効
-
-            if (Display.displays.Length > 0)
-            {
-                Display.displays[0].Activate(); // Display1
-                Debug.Log("Display 1 Active: " + Display.displays[0].active);
-            }
-            if (Display.displays.Length > 1)
-            {
-                Display.displays[1].Activate(); // Display2
-                Debug.Log("Display 2 Active: " + Display.displays[1].active);
-            }
-            // UIのカメラ設定
-            //SetUIForDisplay();
-            Debug.Log("Display 0 active: " + Display.displays[0].active);
-            Debug.Log("Display 1 active: " + Display.displays[1].active);
-
+            mainCamera = cameraObject.GetComponent<Camera>();
         }
-        player2Text.SetActive(false);
+
+        GameObject cameraObject2 = GameObject.FindGameObjectWithTag("SCamera");
+        if (cameraObject2 != null)
+        {
+            secondCamera = cameraObject2.GetComponent<Camera>();
+        }
+
+        // Display 1,2を有効化
+
+        // Display 2を有効
+
+        if (Display.displays.Length > 0)
+        {
+            Display.displays[0].Activate(); // Display1
+            Debug.Log("Display 1 Active: " + Display.displays[0].active);
+        }
+        if (Display.displays.Length > 1)
+        {
+            Display.displays[1].Activate(); // Display2
+            Debug.Log("Display 2 Active: " + Display.displays[1].active);
+        }
+        // UIのカメラ設定
+        //SetUIForDisplay();
+        Debug.Log("Display 0 active: " + Display.displays[0].active);
+        Debug.Log("Display 1 active: " + Display.displays[1].active);
 
     }
 
@@ -208,7 +204,7 @@ public class BoxCheck2 : MonoBehaviour
         }
     }
 
-    IEnumerator HideUIAfterDelay1()
+    IEnumerator HideUIAfterDelay2()
     {
         // 3秒待つ
         yield return new WaitForSeconds(3f);
@@ -228,7 +224,7 @@ public class BoxCheck2 : MonoBehaviour
         Debug.Log("openUI2 active: " + openUI2.activeSelf);
 
         // コルーチンを開始して3秒後にUIを消す
-        StartCoroutine(HideUIAfterDelay1());
+        StartCoroutine(HideUIAfterDelay2());
     }
 
     void InCorrectAnswer2(string playerTag)
