@@ -47,6 +47,11 @@ TagManager:
   - bow 8
   - bow 9
   - bow 10
+  - red potion
+  - blue potion
+  - green potion
+  - pink potion
+  - yellow potion
   layers:
   - Default
   - TransparentFX
