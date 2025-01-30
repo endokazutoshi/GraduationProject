@@ -47,18 +47,11 @@ TagManager:
   - bow 8
   - bow 9
   - bow 10
-  - gear
-  - oil
-  - key
-  - wood
-  - gasoline
-  - spray
-  - magnet
-  - iron
-  - bronze
-  - coal
-  - hammer
-  - keyholder
+  - red potion
+  - blue potion
+  - green potion
+  - pink potion
+  - yellow potion
   layers:
   - Default
   - TransparentFX
