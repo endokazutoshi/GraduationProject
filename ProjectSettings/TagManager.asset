@@ -47,6 +47,18 @@ TagManager:
   - bow 8
   - bow 9
   - bow 10
+  - gear
+  - oil
+  - key
+  - wood
+  - gasoline
+  - spray
+  - magnet
+  - iron
+  - bronze
+  - coal
+  - hammer
+  - keyholder
   layers:
   - Default
   - TransparentFX
