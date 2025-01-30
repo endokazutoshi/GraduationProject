@@ -7,9 +7,11 @@ public class StageSelectController : MonoBehaviour
     public int currentMapIndex = 2;   // 現在選択されている画像のインデックス
 
     private bool isDpadPressed = false; // D-Padが押されたかどうかのフラグ
+    private SceneManagerController sceneManagerController;
 
     void Start()
     {
+        sceneManagerController = FindObjectOfType<SceneManagerController>();
         // 初期状態で最初のマップとテキストのみ表示
         UpdateMapSelection();
         UpdateTextSelection();
@@ -17,6 +19,7 @@ public class StageSelectController : MonoBehaviour
 
     void Update()
     {
+        if (sceneManagerController != null && sceneManagerController.IsInputDisabled()) return;
         // D-Pad 左の入力（前の画像に移動）
         if (Input.GetAxisRaw("DpadHorizontal") < 0 && !isDpadPressed)
         {

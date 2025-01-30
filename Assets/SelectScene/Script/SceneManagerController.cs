@@ -4,34 +4,33 @@ using System.Collections;
 
 public class SceneManagerController : MonoBehaviour
 {
-    public StageSelectController stageSelectController;  // StageSelectControllerへの参照
-    public GameObject selectSceneUI;  // SelectSceneのUIオブジェクト
-
-    // 準備中と準備OKのテキスト（プレイヤーごとに設定）
-    public GameObject[] readyText;  // 準備OKテキスト [0]: Player1, [1]: Player2
-    public GameObject[] notReadyText;  // 準備中テキスト [0]: Player1, [1]: Player2
-
-    private bool[] isPlayerReady = new bool[2];  // プレイヤーの準備状態 [0]: Player1, [1]: Player2
-
-    // フェードアウトに使用するSpriteRenderer
+    public StageSelectController stageSelectController;
+    public GameObject selectSceneUI;
+    public GameObject[] readyText;
+    public GameObject[] notReadyText;
+    private bool[] isPlayerReady = new bool[2];
     public SpriteRenderer fadeSpriteRenderer;
+    public SpriteRenderer fadeSpriteRenderer2;
+    private bool isInputDisabled = false; // 入力無効化フラグ
 
     void Start()
     {
-        // 初期状態では準備中テキストを表示、準備OKテキストを非表示
         UpdateReadyUI(0, false);
         UpdateReadyUI(1, false);
-
-        // フェードアウト用のSpriteRendererを透明に設定
         if (fadeSpriteRenderer != null)
         {
-            fadeSpriteRenderer.color = new Color(0, 0, 0, 0);  // 初期状態は透明
+            fadeSpriteRenderer.color = new Color(0, 0, 0, 0);
+        }
+        if (fadeSpriteRenderer2 != null)
+        {
+            fadeSpriteRenderer2.color = new Color(0, 0, 0, 0);
         }
     }
 
     void Update()
     {
-        // Player1の準備状態を変更
+        if (isInputDisabled) return; // 入力無効時は何もしない
+
         if (Input.GetButtonDown("Jump_P1"))
         {
             isPlayerReady[0] = true;
@@ -43,7 +42,6 @@ public class SceneManagerController : MonoBehaviour
             UpdateReadyUI(0, false);
         }
 
-        // Player2の準備状態を変更
         if (Input.GetButtonDown("Jump_P2"))
         {
             isPlayerReady[1] = true;
@@ -55,13 +53,14 @@ public class SceneManagerController : MonoBehaviour
             UpdateReadyUI(1, false);
         }
 
-        // 両方のプレイヤーが準備OKならシーン遷移
         if (isPlayerReady[0] && isPlayerReady[1])
         {
             if (selectSceneUI != null)
             {
-                selectSceneUI.SetActive(false);  // SelectSceneのUIを非表示にする
+                selectSceneUI.SetActive(false);
             }
+
+            isInputDisabled = true; // 入力を無効化
 
             switch (stageSelectController.currentMapIndex)
             {
@@ -78,42 +77,42 @@ public class SceneManagerController : MonoBehaviour
         }
     }
 
-    // 指定されたプレイヤーの準備状態に応じてUIを更新
     private void UpdateReadyUI(int playerIndex, bool isReady)
     {
         if (readyText[playerIndex] != null)
         {
-            readyText[playerIndex].SetActive(isReady);  // 準備OKテキストの表示切り替え
+            readyText[playerIndex].SetActive(isReady);
         }
-
         if (notReadyText[playerIndex] != null)
         {
-            notReadyText[playerIndex].SetActive(!isReady);  // 準備中テキストの表示切り替え
+            notReadyText[playerIndex].SetActive(!isReady);
         }
     }
 
-    // フェードアウトとシーン遷移を行う
     private IEnumerator FadeAndLoadScene(string sceneName)
     {
-        // フェードアウト
-        if (fadeSpriteRenderer != null)
+        if (fadeSpriteRenderer && fadeSpriteRenderer2 != null)
         {
-            float fadeDuration = 2.0f;  // フェードアウトの時間（2秒）
+            float fadeDuration = 2.0f;
             float elapsedTime = 0f;
             while (elapsedTime < fadeDuration)
             {
                 elapsedTime += Time.deltaTime;
-                // アルファ値を増加させてフェードアウトを実行
                 fadeSpriteRenderer.color = new Color(0, 0, 0, Mathf.Clamp01(elapsedTime / fadeDuration));
+                fadeSpriteRenderer2.color = new Color(0, 0, 0, Mathf.Clamp01(elapsedTime / fadeDuration));
                 yield return null;
             }
         }
 
-        // シーン遷移
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         while (!asyncLoad.isDone)
         {
             yield return null;
         }
+    }
+
+    public bool IsInputDisabled()
+    {
+        return isInputDisabled;
     }
 }

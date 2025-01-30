@@ -7,15 +7,18 @@ public class StageSelectController2 : MonoBehaviour
     public GameObject[] targetText; // テキスト（GameObjectの表示切り替え）
 
     private bool[] isPlayerReady = new bool[2]; // プレイヤーの準備状態
+    private SceneManagerController sceneManagerController;
 
     void Start()
     {
+        sceneManagerController = FindObjectOfType<SceneManagerController>();
         UpdateReadyUI(0, false);
         UpdateReadyUI(1, false);
     }
 
     void Update()
     {
+        if (sceneManagerController != null && sceneManagerController.IsInputDisabled()) return;
         if (Input.GetButtonDown("Jump_P1"))
         {
             isPlayerReady[0] = true;
