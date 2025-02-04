@@ -61,7 +61,7 @@ public class SceneManagerController : MonoBehaviour
                 selectSceneUI.SetActive(false);
             }
 
-
+            isInputDisabled = true;
 
             switch (stageSelectController.currentMapIndex)
             {
@@ -77,7 +77,7 @@ public class SceneManagerController : MonoBehaviour
             }
 
         }
-        isInputDisabled = true; // “ü—Í‚ð–³Œø‰»
+        
     }
 
     private void UpdateReadyUI(int playerIndex, bool isReady)
