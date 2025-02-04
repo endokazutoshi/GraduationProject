@@ -11,9 +11,11 @@ public class StageSelectController2 : MonoBehaviour
 
     void Start()
     {
-        sceneManagerController = FindObjectOfType<SceneManagerController>();
+
         UpdateReadyUI(0, false);
         UpdateReadyUI(1, false);
+        sceneManagerController = FindObjectOfType<SceneManagerController>();
+
     }
 
     void Update()
