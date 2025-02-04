@@ -55,12 +55,13 @@ public class SceneManagerController : MonoBehaviour
 
         if (isPlayerReady[0] && isPlayerReady[1])
         {
+
             if (selectSceneUI != null)
             {
                 selectSceneUI.SetActive(false);
             }
 
-            isInputDisabled = true; // “ü—Í‚ð–³Œø‰»
+
 
             switch (stageSelectController.currentMapIndex)
             {
@@ -74,7 +75,9 @@ public class SceneManagerController : MonoBehaviour
                     StartCoroutine(FadeAndLoadScene("PlayScene3"));
                     break;
             }
+
         }
+        isInputDisabled = true; // “ü—Í‚ð–³Œø‰»
     }
 
     private void UpdateReadyUI(int playerIndex, bool isReady)

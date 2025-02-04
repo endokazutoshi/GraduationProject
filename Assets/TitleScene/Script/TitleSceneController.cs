@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class TitleSceneController : MonoBehaviour
 {
     public AudioClip buttonSound; // Aボタンを押した時の音
-    public SpriteRenderer fadeSprite; // フェード用の黒いPNG（SpriteRenderer）
+    public SpriteRenderer[] fadeSprite; // フェード用の黒いPNG（SpriteRenderer）の配列
     public Slider volumeSlider;   // 音量調整用のスライダー
 
     private AudioSource audioSource;
@@ -22,9 +22,12 @@ public class TitleSceneController : MonoBehaviour
         // フェード画像の初期設定（透明にしておく）
         if (fadeSprite != null)
         {
-            var color = fadeSprite.color;
-            color.a = 0;
-            fadeSprite.color = color;
+            foreach (var sprite in fadeSprite)
+            {
+                var color = sprite.color;
+                color.a = 0;  // 透明に設定
+                sprite.color = color;
+            }
         }
 
         // 音量スライダーの初期設定
@@ -65,7 +68,7 @@ public class TitleSceneController : MonoBehaviour
     {
         if (fadeSprite != null)
         {
-            float startAlpha = fadeSprite.color.a;
+            float startAlpha = fadeSprite[0].color.a; // 最初のSpriteRendererのalphaを取得
             float time = 0;
 
             while (time < duration)
@@ -73,9 +76,13 @@ public class TitleSceneController : MonoBehaviour
                 time += Time.deltaTime;
                 float alpha = Mathf.Lerp(startAlpha, 1, time / duration);
 
-                var color = fadeSprite.color;
-                color.a = alpha;
-                fadeSprite.color = color;
+                // 各SpriteRendererのalphaを変更
+                foreach (var sprite in fadeSprite)
+                {
+                    var color = sprite.color;
+                    color.a = alpha;
+                    sprite.color = color;
+                }
 
                 yield return null;
             }
