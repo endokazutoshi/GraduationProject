@@ -27146,7 +27146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c754a0b8d3cf3dc41bf35b2550a66bbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 5
+  lifeTime: 6
   textAppearTime: 4
   countdownObjects:
   - {fileID: 1029606692}
