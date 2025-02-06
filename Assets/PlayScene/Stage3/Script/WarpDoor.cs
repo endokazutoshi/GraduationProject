@@ -10,6 +10,9 @@ public class WarpDoor : MonoBehaviour
     public AudioClip warpSound;        // ワープ時に鳴らす音
     private AudioSource audioSource;   // 音を鳴らすためのAudioSourceコンポーネント
 
+    private bool canOpenDoor1 = false; // プレイヤー1がドアを開ける状態
+    private bool canOpenDoor2 = false; // プレイヤー2がドアを開ける状態
+
     void Start()
     {
         // AudioSourceコンポーネントを取得
@@ -58,19 +61,39 @@ public class WarpDoor : MonoBehaviour
     {
         if (player != null && targetPosition != null)
         {
-            // ワープ前に音を鳴らし、プレイヤーを非表示にする
-            audioSource.PlayOneShot(warpSound);  // ワープ音を鳴らす
-            player.SetActive(false);  // プレイヤーを非表示にする
+            Debug.Log("ワープ開始");
 
-            // 1秒待機
+
+
+            // ワープ前に音を鳴らす
+            if (warpSound != null)
+            {
+                audioSource.PlayOneShot(warpSound);
+                Debug.Log("ワープ音を再生");
+            }
+            else
+            {
+                Debug.LogWarning("warpSoundが設定されていません");
+            }
+            player.SetActive(false);
+
+
             yield return new WaitForSeconds(1f);
 
-            // プレイヤーを指定位置にワープさせる
             player.transform.position = targetPosition.position;
-            player.SetActive(true);  // プレイヤーを再表示する
+            player.SetActive(true);
 
             // 再表示後に音を鳴らす
-            audioSource.PlayOneShot(warpSound);  // 再びワープ音を鳴らす
+            if (warpSound != null)
+            {
+                audioSource.PlayOneShot(warpSound);
+                Debug.Log("ワープ音を再生");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("プレイヤーまたはターゲット位置が無効");
         }
     }
+
 }
