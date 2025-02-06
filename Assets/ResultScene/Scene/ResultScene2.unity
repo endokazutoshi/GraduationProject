@@ -348,7 +348,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 216277290}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 461b6514b6f374549b6d5800b780c2b0, type: 3}
   m_Name: 
@@ -633,7 +633,7 @@ GameObject:
   - component: {fileID: 477656245}
   m_Layer: 5
   m_Name: Canvas2P
-  m_TagString: Untagged
+  m_TagString: Player2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -812,9 +812,10 @@ GameObject:
   - component: {fileID: 746009682}
   - component: {fileID: 746009671}
   - component: {fileID: 746009670}
+  - component: {fileID: 746009687}
   m_Layer: 0
-  m_Name: ResultPlayer1
-  m_TagString: Untagged
+  m_Name: Player1
+  m_TagString: Player1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -868,7 +869,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 4
   m_GravityScale: 2.5
-  m_Material: {fileID: 6200000, guid: 17d9dd1696d6eb141a0e53724e8c4250, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -878,7 +879,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 6
+  m_Constraints: 4
 --- !u!58 &746009684
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -974,13 +975,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 746009669}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.79, y: -0.82, z: 100}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.789734, y: -0.8200073, z: 100}
   m_LocalScale: {x: 2, y: 2, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &746009687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 746009669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 371d5850f5857d543aa9ec5ce6338577, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1137686279
 GameObject:
   m_ObjectHideFlags: 0
@@ -1270,6 +1283,7 @@ MonoBehaviour:
   LoseText1P: {fileID: 292093534}
   WinText2P: {fileID: 1876359589}
   LoseText2P: {fileID: 1308537665}
+  playerAnimationController: {fileID: 0}
 --- !u!1 &1758820844
 GameObject:
   m_ObjectHideFlags: 0
@@ -1762,9 +1776,10 @@ GameObject:
   - component: {fileID: 2130065250}
   - component: {fileID: 2130065249}
   - component: {fileID: 2130065248}
+  - component: {fileID: 2130065254}
   m_Layer: 0
-  m_Name: ResultPlayer2
-  m_TagString: Untagged
+  m_Name: Player2
+  m_TagString: Player2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1818,7 +1833,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 4
   m_GravityScale: 2.5
-  m_Material: {fileID: 6200000, guid: 17d9dd1696d6eb141a0e53724e8c4250, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1828,7 +1843,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 6
+  m_Constraints: 4
 --- !u!58 &2130065251
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1924,13 +1939,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2130065247}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.8000002, y: -0.82, z: 5}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.7999268, y: -0.8200073, z: 5}
   m_LocalScale: {x: 2, y: 2, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2130065254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2130065247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 371d5850f5857d543aa9ec5ce6338577, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
