@@ -13,9 +13,18 @@ public class PlayerJumpControl : MonoBehaviour
 
     public LayerMask StageLayer; // mapCanvasのWallレイヤーに設定
 
+    [SerializeField] private AudioSource audioSource; // SE用のAudioSource
+    [SerializeField] private AudioClip jumpSE; // ジャンプ時のSE
+
     private void Start()
     {
         rbody2D = GetComponent<Rigidbody2D>();
+
+        // AudioSourceがアタッチされていない場合、取得
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
     }
 
     private void Update()
@@ -55,6 +64,16 @@ public class PlayerJumpControl : MonoBehaviour
             // ジャンプの初期力を加える
             rbody2D.velocity = new Vector2(rbody2D.velocity.x, initialJumpForce);
 
+            // SEを再生
+            if (audioSource != null && jumpSE != null)
+            {
+                audioSource.PlayOneShot(jumpSE);
+            }
+            else
+            {
+                Debug.LogWarning("AudioSource または JumpSE が設定されていません！");
+            }
+
             isJumping = true;
             isGrounded = false; // 地面から離れたとみなす
             jumpTimeCounter = 0;
@@ -69,7 +88,6 @@ public class PlayerJumpControl : MonoBehaviour
     {
         if (jumpTimeCounter < maxJumpTime)
         {
-            // ボタンを押し続けている間、追加ジャンプ力を加える
             rbody2D.velocity = new Vector2(rbody2D.velocity.x, rbody2D.velocity.y + holdJumpForce * Time.deltaTime);
             jumpTimeCounter += Time.deltaTime;
         }
@@ -85,49 +103,29 @@ public class PlayerJumpControl : MonoBehaviour
     }
 
     [SerializeField]
-    private float groundCheckDistanceX = 0.5f; // 左右の範囲をInspectorで調整可能
+    private float groundCheckDistanceX = 0.5f;
     [SerializeField]
-    private float groundCheckDistanceY = 0.5f; // 下方向の範囲をInspectorで調整可能
+    private float groundCheckDistanceY = 0.5f;
 
     bool GroundChk()
     {
-        // 現在位置を中心に各チェックポイントを計算
         Vector3 leftPosition = transform.position - new Vector3(groundCheckDistanceX, 0, 0);
         Vector3 rightPosition = transform.position + new Vector3(groundCheckDistanceX, 0, 0);
         Vector3 bottomPosition = transform.position - new Vector3(0, groundCheckDistanceY, 0);
 
-        // デバッグ用にラインを表示
-        Debug.DrawLine(leftPosition, rightPosition, Color.green); // 左右のライン
-        Debug.DrawLine(transform.position, bottomPosition, Color.blue); // 下方向のライン
+        Debug.DrawLine(leftPosition, rightPosition, Color.green);
+        Debug.DrawLine(transform.position, bottomPosition, Color.blue);
 
-        // X方向のラインチェック
         RaycastHit2D xHit = Physics2D.Linecast(leftPosition, rightPosition, StageLayer);
-
-        // Y方向のラインチェック（下方向のみ）
         RaycastHit2D yHit = Physics2D.Linecast(transform.position, bottomPosition, StageLayer);
 
-        // XまたはY方向に接触がある場合
         if (xHit.collider != null || yHit.collider != null)
         {
-            if (xHit.collider != null)
-            {
-                Debug.Log($"Wall 検出（X方向）: {xHit.collider.gameObject.name}");
-            }
-
-            if (yHit.collider != null)
-            {
-                Debug.Log($"Wall 検出（Y方向）: {yHit.collider.gameObject.name}");
-            }
-
             return true;
         }
 
-        return false; // 接触がない場合
+        return false;
     }
-
-
-
-
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
