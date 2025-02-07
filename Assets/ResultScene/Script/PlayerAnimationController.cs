@@ -1,36 +1,32 @@
 using UnityEngine;
 
-public class PlayerAnimationController : MonoBehaviour
+public class PlayerAnimationController1 : MonoBehaviour
 {
     private Animator animator;
+
+    private string winAnimation = "win";  // 勝利のブール変数名
+    private string loseAnimation = "lose";  // 敗北のブール変数名
 
     void Start()
     {
         animator = GetComponent<Animator>();
     }
 
-    // PlayerGoalに応じてアニメーションを設定
-    public void SetPlayerGoal(int player1Goal, int player2Goal)
+    // プレイヤーが勝った場合に呼ばれる
+    public void SetWinAnimation(bool state)
     {
-        // プレイヤー1がゴールした場合
-        if (player1Goal == 1 && player2Goal == 0)
+        if (animator != null)
         {
-            // プレイヤー1に勝利アニメーションを設定
-            if (CompareTag("Player1"))
-            {
-                animator.SetBool("lose", true);
-                Debug.Log("Player1 wins!");
-            }
+            animator.SetBool(winAnimation, state);  // 勝利アニメーションの状態を設定
         }
-        // プレイヤー2がゴールした場合
-        else if (player2Goal == 1 && player1Goal == 0)
+    }
+
+    // プレイヤーが負けた場合に呼ばれる
+    public void SetLoseAnimation(bool state)
+    {
+        if (animator != null)
         {
-            // プレイヤー2に勝利アニメーションを設定
-            if (CompareTag("Player2"))
-            {
-                animator.SetBool("win", true);
-                Debug.Log("Player2 wins!");
-            }
+            animator.SetBool(loseAnimation, state);  // 敗北アニメーションの状態を設定
         }
     }
 }
