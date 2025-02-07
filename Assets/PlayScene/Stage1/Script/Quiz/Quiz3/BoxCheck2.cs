@@ -37,6 +37,13 @@ public class BoxCheck2 : MonoBehaviour
     private Camera mainCamera;                      // プレイヤー1用カメラ
     private Camera secondCamera;                    // プレイヤー2用カメラ
 
+    // 修正: 正解時と不正解時の音をそれぞれ割り当てられるように
+    public AudioSource correctAudioSource2;
+    public AudioSource incorrectAudioSource2;
+
+    public AudioClip correctSound2;   // 正解音
+    public AudioClip incorrectSound2; // 不正解音
+
 
     void Start()
     {
@@ -216,6 +223,10 @@ public class BoxCheck2 : MonoBehaviour
     }
     void CorrectAnswer2()
     {
+        if (correctAudioSource2 != null && correctSound2 != null)
+        {
+            correctAudioSource2.PlayOneShot(correctSound2);
+        }
         targetObject.SetActive(true);
         targetObject2.SetActive(true);
         openUI1.SetActive(true);
@@ -260,7 +271,10 @@ public class BoxCheck2 : MonoBehaviour
             targetPosition2 = (Vector2)targetPlayer2.transform.position + forceDirection2 * blowDistance;
         }
 
-
+        if (incorrectAudioSource2 != null && incorrectSound2 != null)
+        {
+            incorrectAudioSource2.PlayOneShot(incorrectSound2);
+        }
 
         blowTime = 0f;  // 吹き飛ばしの時間をリセット
 
