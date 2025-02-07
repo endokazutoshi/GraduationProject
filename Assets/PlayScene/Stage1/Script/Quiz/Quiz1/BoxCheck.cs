@@ -37,6 +37,12 @@ public class BoxCheck : MonoBehaviour
     private Camera mainCamera;                      // プレイヤー1用カメラ
     private Camera secondCamera;                    // プレイヤー2用カメラ
 
+    public AudioSource correctAudioSource;
+    public AudioSource incorrectAudioSource;
+
+    public AudioClip correctSound;
+    public AudioClip incorrectSound;
+
     void Start()
     {
         quizManager = FindObjectOfType<QuizManager>();
@@ -80,6 +86,11 @@ public class BoxCheck : MonoBehaviour
         //SetUIForDisplay();
         Debug.Log("Display 0 active: " + Display.displays[0].active);
         Debug.Log("Display 1 active: " + Display.displays[1].active);
+
+        if(correctAudioSource == null || incorrectAudioSource == null)
+        {
+            Debug.Log("正解音、不正解音のどちらか又は両方が割り当てられていません");
+        }
 
 
     }
@@ -206,12 +217,18 @@ public class BoxCheck : MonoBehaviour
 
     void CorrectAnswer()
     {
+
+        if (correctAudioSource != null && correctSound != null)
+        {
+            correctAudioSource.PlayOneShot(correctSound);
+        }
         targetObject.SetActive(true);
         targetObject2.SetActive(true);
         openUI1.SetActive(true);
         openUI2.SetActive(true);
         Debug.Log("openUI1 active: " + openUI1.activeSelf);
         Debug.Log("openUI2 active: " + openUI2.activeSelf);
+
 
         // コルーチンを開始して3秒後にUIを消す
         StartCoroutine(HideUIAfterDelay());
@@ -248,6 +265,11 @@ public class BoxCheck : MonoBehaviour
             Vector2 forceDirection2 = -targetPlayer2.transform.right;  // プレイヤー2の吹き飛ばし方向
             float blowDistance = 5f;  // 吹き飛ばし距離（ユニット）
             targetPosition2 = (Vector2)targetPlayer2.transform.position + forceDirection2 * blowDistance;
+        }
+
+        if (incorrectAudioSource != null && incorrectSound != null)
+        {
+            incorrectAudioSource.PlayOneShot(incorrectSound);
         }
 
         blowTime = 0f;  // 吹き飛ばしの時間をリセット
