@@ -12400,8 +12400,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daae66a8d5020e746b05bd50a6e3b441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPosition1: {fileID: 721277926}
-  targetPosition2: {fileID: 721277926}
+  targetPosition1: {fileID: 0}
+  targetPosition2: {fileID: 0}
 --- !u!1 &421545214
 GameObject:
   m_ObjectHideFlags: 0
@@ -20762,22 +20762,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &721277926
-Transform:
+--- !u!224 &721277926
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 721277925}
-  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1009.54, y: -447.58, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.9, y: 0.9, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1675045676}
   m_Father: {fileID: 630665737}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -1009.54, y: -447.58}
+  m_SizeDelta: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!61 &721277927
 BoxCollider2D:
   m_ObjectHideFlags: 0
