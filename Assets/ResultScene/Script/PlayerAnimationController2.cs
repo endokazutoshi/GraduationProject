@@ -6,9 +6,6 @@ public class PlayerAnimationController2 : MonoBehaviour
 
     private string winAnimation = "win";  // 勝利のブール変数名
     private string loseAnimation = "lose";  // 敗北のブール変数名
-    private string player2winAnimation = "2Pwin";
-    private string player2loseAnimation = "2Plose";
-
 
     void Start()
     {
@@ -29,7 +26,7 @@ public class PlayerAnimationController2 : MonoBehaviour
     {
         if (animator != null)
         {
-            animator.SetBool(player2loseAnimation, state);  // 敗北アニメーションの状態を設定
+            animator.SetBool(loseAnimation, state);  // 敗北アニメーションの状態を設定
         }
     }
 }

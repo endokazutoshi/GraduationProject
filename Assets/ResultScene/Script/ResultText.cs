@@ -1,3 +1,4 @@
+//using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UIElements.Experimental;
 
@@ -39,6 +40,7 @@ public class ResultText : MonoBehaviour
             }
             if (player2AnimationController != null)
             {
+                Debug.Log("Player2が負けたよ");
                 player2AnimationController.SetLoseAnimation(true);  // プレイヤー2の敗北アニメーション
             }
             if (player1camera2AnimationController != null)
@@ -60,6 +62,7 @@ public class ResultText : MonoBehaviour
             // アニメーション設定
             if (player2AnimationController != null)
             {
+                Debug.Log("Player2が勝ったよ");
                 player2AnimationController.SetWinAnimation(true);  // プレイヤー2の勝利アニメーション
             }
             if (player1AnimationController != null)
@@ -68,11 +71,11 @@ public class ResultText : MonoBehaviour
             }
             if (player1camera2AnimationController != null)
             {
-                player1camera2AnimationController.SetLoseAnimation(true);//プレイヤー2の勝利アニメーション
+                player1camera2AnimationController.SetLoseAnimation(true);//プレイヤー1の敗北アニメーション
             }
             if (player2camera2AnimationContoroller != null)
             {
-                player2camera2AnimationContoroller.SetWinAnimation(true);//プレイヤー1の敗北アニメーション
+                player2camera2AnimationContoroller.SetWinAnimation(true);//プレイヤー2の勝利アニメーション
             }
             // テキスト表示
             WinText2P.SetActive(true);  // プレイヤー2の勝利
