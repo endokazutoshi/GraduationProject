@@ -1554,9 +1554,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 900c2806d16057747bdc166bf7a91479, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
-  winAnimation: win
-  loseAnimation: lose
 --- !u!114 &1522054496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2366,7 +2363,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2130065247}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90431d2cb53be5c4f8be494e8667dc5f, type: 3}
+  m_Script: {fileID: 11500000, guid: 1c8a3ae8da964764dbc43a0fec5a02d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
