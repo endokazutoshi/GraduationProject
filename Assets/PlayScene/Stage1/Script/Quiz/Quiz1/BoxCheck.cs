@@ -217,22 +217,46 @@ public class BoxCheck : MonoBehaviour
 
     void CorrectAnswer()
     {
-
         if (correctAudioSource != null && correctSound != null)
         {
             correctAudioSource.PlayOneShot(correctSound);
         }
-        targetObject.SetActive(true);
-        targetObject2.SetActive(true);
+
+        // **プレイヤーのカメラを取得**
+        Camera activeCamera = null;
+        if (canPlayer1) // プレイヤー1が正解した場合
+        {
+            activeCamera = mainCamera;  // MCamera
+        }
+        else if (canPlayer2) // プレイヤー2が正解した場合
+        {
+            activeCamera = secondCamera;  // SCamera
+        }
+
+        // **対応するカメラのディスプレイだけ扉を開く**
+        if (activeCamera != null)
+        {
+            if (activeCamera.CompareTag("MCamera"))
+            {
+                targetObject.SetActive(true);  // Display1（MCamera）の扉を開く
+                Debug.Log("MCameraのディスプレイで扉を開く！");
+            }
+            else if (activeCamera.CompareTag("SCamera"))
+            {
+                targetObject2.SetActive(true); // Display2（SCamera）の扉を開く
+                Debug.Log("SCameraのディスプレイで扉を開く！");
+            }
+        }
+
         openUI1.SetActive(true);
         openUI2.SetActive(true);
         Debug.Log("openUI1 active: " + openUI1.activeSelf);
         Debug.Log("openUI2 active: " + openUI2.activeSelf);
 
-
-        // コルーチンを開始して3秒後にUIを消す
+        // 3秒後にUIを消す
         StartCoroutine(HideUIAfterDelay());
     }
+
 
     void IncorrectAnswer(string playerTag)
     {
