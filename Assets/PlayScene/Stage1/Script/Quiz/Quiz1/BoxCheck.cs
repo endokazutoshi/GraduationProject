@@ -7,6 +7,8 @@ public class BoxCheck : MonoBehaviour
 
     public GameObject targetObject;
     public GameObject targetObject2;
+    public GameObject targetObject3;
+    public GameObject targetObject4;
 
     public GameObject openUI1;
     public GameObject openUI2;
@@ -34,8 +36,8 @@ public class BoxCheck : MonoBehaviour
     public GameObject player2Text;  // プレイヤー2用
     public float textDisplayDuration = 2f;  // テキストを表示する時間
 
-    private Camera mainCamera;                      // プレイヤー1用カメラ
-    private Camera secondCamera;                    // プレイヤー2用カメラ
+    public Camera mainCamera;                      // プレイヤー1用カメラ
+    public Camera secondCamera;                    // プレイヤー2用カメラ
 
     public AudioSource correctAudioSource;
     public AudioSource incorrectAudioSource;
@@ -48,6 +50,8 @@ public class BoxCheck : MonoBehaviour
         quizManager = FindObjectOfType<QuizManager>();
         targetObject.SetActive(false);
         targetObject2.SetActive(false);
+        targetObject3.SetActive(false);
+        targetObject4.SetActive(false);
         openUI1.SetActive(false);
         openUI2.SetActive(false);
         currentTime = 0f;  // 初期化時にタイマーは0に設定しておく
@@ -68,6 +72,15 @@ public class BoxCheck : MonoBehaviour
             secondCamera = cameraObject2.GetComponent<Camera>();
         }
 
+        if (mainCamera != null)
+        {
+            mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Display2Only")); // Display2Onlyを非表示
+        }
+
+        if (secondCamera != null)
+        {
+            secondCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Display1Only")); // Display1Onlyを非表示
+        }
         // Display 1,2を有効化
 
         // Display 2を有効
@@ -203,16 +216,11 @@ public class BoxCheck : MonoBehaviour
         }
     }
 
-    // UI表示後に3秒で消すためのコルーチン
     IEnumerator HideUIAfterDelay()
     {
-        // 3秒待つ
         yield return new WaitForSeconds(3f);
-
-        // UIを非表示にする
         openUI1.SetActive(false);
         openUI2.SetActive(false);
-
     }
 
     void CorrectAnswer()
@@ -222,30 +230,16 @@ public class BoxCheck : MonoBehaviour
             correctAudioSource.PlayOneShot(correctSound);
         }
 
-        // **プレイヤーのカメラを取得**
-        Camera activeCamera = null;
-        if (canPlayer1) // プレイヤー1が正解した場合
+        if (mainCamera != null)
         {
-            activeCamera = mainCamera;  // MCamera
-        }
-        else if (canPlayer2) // プレイヤー2が正解した場合
-        {
-            activeCamera = secondCamera;  // SCamera
+            targetObject.SetActive(true);
+            targetObject2.SetActive(true);
         }
 
-        // **対応するカメラのディスプレイだけ扉を開く**
-        if (activeCamera != null)
+        if (secondCamera != null)
         {
-            if (activeCamera.CompareTag("MCamera"))
-            {
-                targetObject.SetActive(true);  // Display1（MCamera）の扉を開く
-                Debug.Log("MCameraのディスプレイで扉を開く！");
-            }
-            else if (activeCamera.CompareTag("SCamera"))
-            {
-                targetObject2.SetActive(true); // Display2（SCamera）の扉を開く
-                Debug.Log("SCameraのディスプレイで扉を開く！");
-            }
+            targetObject3.SetActive(true);
+            targetObject4.SetActive(true);
         }
 
         openUI1.SetActive(true);
@@ -253,7 +247,6 @@ public class BoxCheck : MonoBehaviour
         Debug.Log("openUI1 active: " + openUI1.activeSelf);
         Debug.Log("openUI2 active: " + openUI2.activeSelf);
 
-        // 3秒後にUIを消す
         StartCoroutine(HideUIAfterDelay());
     }
 
@@ -300,40 +293,6 @@ public class BoxCheck : MonoBehaviour
         currentTime = timerDuration;  // タイマーを開始
         Debug.Log("タイマー開始: " + currentTime);
     }
-    //void SetUIForDisplay()
-    //{
-    //    // openUI1のCanvas設定
-    //    if (openUI1 != null)
-    //    {
-    //        Canvas canvas1 = openUI1.GetComponent<Canvas>();
-    //        if (canvas1 != null)
-    //        {
-    //            canvas1.renderMode = RenderMode.ScreenSpaceCamera;
-    //            canvas1.worldCamera = mainCamera;  // Display 1 用カメラを設定
-    //            canvas1.targetDisplay = 0;  // Display 1に表示
-    //            Debug.Log("Canvas 1 targetDisplay: " + canvas1.targetDisplay);
-
-    //        }
-    //    }
-
-    //    // openUI2のCanvas設定
-    //    if (openUI2 != null)
-    //    {
-    //        Canvas canvas2 = openUI2.GetComponent<Canvas>();
-    //        if (canvas2 != null)
-    //        {
-    //            canvas2.renderMode = RenderMode.ScreenSpaceCamera;
-    //            canvas2.worldCamera = secondCamera;  // Display 2 用カメラを設定
-    //            canvas2.targetDisplay = 1;  // Display 2に表示
-    //            Debug.Log("Canvas 2 targetDisplay: " + canvas2.targetDisplay);
-
-    //        }
-    //    }
-       
-
-    //}
-
-
 
     void TimerEnded()
     {

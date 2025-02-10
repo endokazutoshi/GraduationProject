@@ -52,6 +52,18 @@ TagManager:
   - green potion
   - pink potion
   - yellow potion
+  - gear
+  - magnet
+  - hammer
+  - key
+  - wood
+  - bronze
+  - spray
+  - iron
+  - coal
+  - gasoline
+  - oil
+  - keyholder
   layers:
   - Default
   - TransparentFX
@@ -65,8 +77,8 @@ TagManager:
   - Quiz1P
   - Quiz2P
   - Frozen
-  - 
-  - 
+  - Display1Only
+  - Display2Only
   - 
   - 
   - 

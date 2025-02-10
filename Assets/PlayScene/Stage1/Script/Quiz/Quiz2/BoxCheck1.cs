@@ -1,18 +1,20 @@
 using UnityEngine;
 using System.Collections;
-
+using Unity.VisualScripting;
 public class BoxCheck1 : MonoBehaviour
 {
-    private QuizManager1 quizManager;
+    private QuizManager1 quizManager1;
 
     public GameObject targetObject;
     public GameObject targetObject2;
+    public GameObject targetObject3;
+    public GameObject targetObject4;
 
-    public GameObject targetPlayer1;  // プレイヤー1
-    public GameObject targetPlayer2;  // プレイヤー2
     public GameObject openUI1;
     public GameObject openUI2;
 
+    public GameObject targetPlayer1;  // プレイヤー1
+    public GameObject targetPlayer2;  // プレイヤー2
 
     public float timerDuration = 2f;  // 操作不能にさせる秒数
     private float currentTime;
@@ -27,28 +29,31 @@ public class BoxCheck1 : MonoBehaviour
 
     private float blowTime = 0f;    // 吹き飛ばしにかかる時間
     float speedFactor = 20f;  // 速さを倍にする（調整可能）
-    bool canPlayer1 = false;//プレイヤーが触れているかの確認
-    bool canPlayer2 = false;//プレイヤーが触れているかの確認
+    bool canPlayer1 = false; // プレイヤーが触れているかの確認
+    bool canPlayer2 = false; // プレイヤーが触れているかの確認
 
     public GameObject player1Text;  // プレイヤー1用
     public GameObject player2Text;  // プレイヤー2用
     public float textDisplayDuration = 2f;  // テキストを表示する時間
 
-    private Camera mainCamera;                      // プレイヤー1用カメラ
-    private Camera secondCamera;                    // プレイヤー2用カメラ
+    public Camera mainCamera;                      // プレイヤー1用カメラ
+    public Camera secondCamera;                    // プレイヤー2用カメラ
 
-    public AudioSource correctAudioSource1;
-    public AudioSource incorrectAudioSource1;
+    public AudioSource correctAudioSource;
+    public AudioSource incorrectAudioSource;
 
-    public AudioClip correctSound1;
-    public AudioClip incorrectSound1;
-
+    public AudioClip correctSound;
+    public AudioClip incorrectSound;
 
     void Start()
     {
-        quizManager = FindObjectOfType<QuizManager1>();
+        quizManager1 = FindObjectOfType<QuizManager1>();
         targetObject.SetActive(false);
         targetObject2.SetActive(false);
+        targetObject3.SetActive(false);
+        targetObject4.SetActive(false);
+        openUI1.SetActive(false);
+        openUI2.SetActive(false);
         currentTime = 0f;  // 初期化時にタイマーは0に設定しておく
         // 初期状態ではテキストを非表示にしておく
         if (player1Text != null) player1Text.SetActive(false);
@@ -67,6 +72,15 @@ public class BoxCheck1 : MonoBehaviour
             secondCamera = cameraObject2.GetComponent<Camera>();
         }
 
+        if (mainCamera != null)
+        {
+            mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Display2Only")); // Display2Onlyを非表示
+        }
+
+        if (secondCamera != null)
+        {
+            secondCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Display1Only")); // Display1Onlyを非表示
+        }
         // Display 1,2を有効化
 
         // Display 2を有効
@@ -86,6 +100,12 @@ public class BoxCheck1 : MonoBehaviour
         Debug.Log("Display 0 active: " + Display.displays[0].active);
         Debug.Log("Display 1 active: " + Display.displays[1].active);
 
+        if (correctAudioSource == null || incorrectAudioSource == null)
+        {
+            Debug.Log("正解音、不正解音のどちらか又は両方が割り当てられていません");
+        }
+
+
     }
 
     void Update()
@@ -93,57 +113,51 @@ public class BoxCheck1 : MonoBehaviour
         // 吹き飛ばし処理
         if (isBlown1)
         {
-            // プレイヤー1を吹き飛ばす
             targetPlayer1.transform.position = Vector2.Lerp(targetPlayer1.transform.position, targetPosition1, blowTime * Time.deltaTime);
-            // 目的地に到達したら移動を停止
             if (Vector2.Distance(targetPlayer1.transform.position, targetPosition1) < 0.1f)
             {
                 isBlown1 = false;  // プレイヤー1の吹き飛ばしが終了
             }
         }
+
         if (isBlown2)
         {
-            // プレイヤー2を吹き飛ばす
             targetPlayer2.transform.position = Vector2.Lerp(targetPlayer2.transform.position, targetPosition2, blowTime * Time.deltaTime);
-            // 目的地に到達したら移動を停止
             if (Vector2.Distance(targetPlayer2.transform.position, targetPosition2) < 0.1f)
             {
                 isBlown2 = false;  // プレイヤー2の吹き飛ばしが終了
             }
         }
 
-
-
         // 吹き飛ばし時間を進める
-        blowTime += Time.deltaTime * speedFactor;  // speedFactorを掛けて速く進行させる
+        blowTime += Time.deltaTime * speedFactor;
 
         // タイマーが減少する
         if (currentTime > 0)
         {
-            currentTime -= Time.deltaTime;  // タイマーを減少
-                                            // Debug.Log("タイマー残り時間: " + currentTime);  // デバッグログでタイマー残り時間を表示
+            currentTime -= Time.deltaTime;
         }
         else if (currentTime <= 0)
         {
-            TimerEnded1();  // タイマーが0になったら、TimerEnded1を呼び出す
+            TimerEnded();  // タイマーが0になったら、TimerEndedを呼び出す
         }
     }
 
     public void CheckItem1(GameObject item)
     {
         // 現在の問題を取得
-        QuizManager1.QuestionAnswerPair currentQuestion = quizManager.GetCurrentQuestion1();
+        QuizManager1.QuestionAnswerPair currentQuestion = quizManager1.GetCurrentQuestion1();
 
         if (currentQuestion != null)
         {
             // 現在の問題の正解タグを取得
-            string CorrectAnswerTag = currentQuestion.correctAnswer1Tag;
+            string correctAnswerTag = currentQuestion.correctAnswer1Tag;
 
             // 正解かどうかをチェック
-            if (item.CompareTag(CorrectAnswerTag))
+            if (item.CompareTag(correctAnswerTag))
             {
                 Debug.Log("正解です！");
-                CorrectAnswer1();
+                CorrectAnswer();
             }
             else
             {
@@ -153,14 +167,13 @@ public class BoxCheck1 : MonoBehaviour
                 if (canPlayer1 && Input.GetButtonDown("Y_Button_1P"))
                 {
                     Debug.Log("Player 1's Bボタンが押されました！");
-                    InCorrectAnswer1("Player1");
+                    IncorrectAnswer("Player1");
                 }
                 if (canPlayer2 && Input.GetButtonDown("Y_Button_2P"))
                 {
                     Debug.Log("Player 2's Bボタンが押されました！");
-                    InCorrectAnswer1("Player2");
+                    IncorrectAnswer("Player2");
                 }
-
             }
         }
         else
@@ -168,6 +181,7 @@ public class BoxCheck1 : MonoBehaviour
             Debug.LogError("現在の問題がありません");
         }
     }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         // プレイヤー1のタグを確認
@@ -175,22 +189,16 @@ public class BoxCheck1 : MonoBehaviour
         {
             canPlayer1 = true;  // プレイヤーが触れたらBボタンが効くようにする
             Debug.Log("プレイヤー1がオブジェクトに触れました！");
-            // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
-            // プレイヤー1用テキストを表示
             player1Text.SetActive(true);
-
         }
         if (other.CompareTag("Player2"))
         {
             canPlayer2 = true;  // プレイヤーが触れたらBボタンが効くようにする
             Debug.Log("プレイヤー2がオブジェクトに触れました！");
-            // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
-            // プレイヤー2用テキストを表示
             player2Text.SetActive(true);
-
         }
-
     }
+
     void OnTriggerExit2D(Collider2D other)
     {
         // プレイヤー1のタグを確認
@@ -198,48 +206,54 @@ public class BoxCheck1 : MonoBehaviour
         {
             canPlayer1 = false;  // プレイヤーが触れたらBボタンが効くようにする
             Debug.Log("プレイヤー1がオブジェクトから離れました！");
-            // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
             player1Text.SetActive(false);
         }
         if (other.CompareTag("Player2"))
         {
             canPlayer2 = false;  // プレイヤーが触れたらBボタンが効くようにする
             Debug.Log("プレイヤー2がオブジェクトから離れました！");
-            // objectPlayer = other.gameObject;  // 触れたプレイヤーオブジェクトを設定
             player2Text.SetActive(false);
         }
     }
 
-    IEnumerator HideUIAfterDelay1()
+    IEnumerator HideUIAfterDelay()
     {
-        // 3秒待つ
         yield return new WaitForSeconds(3f);
-
-        // UIを非表示にする
         openUI1.SetActive(false);
         openUI2.SetActive(false);
-
     }
-    void CorrectAnswer1()
+
+    void CorrectAnswer()
     {
-        if (correctAudioSource1 != null && correctSound1 != null)
+        if (correctAudioSource != null && correctSound != null)
         {
-            correctAudioSource1.PlayOneShot(correctSound1);
+            correctAudioSource.PlayOneShot(correctSound);
         }
-        targetObject.SetActive(true);
-        targetObject2.SetActive(true);
+
+        if (mainCamera != null)
+        {
+            targetObject.SetActive(true);
+            targetObject2.SetActive(true);
+        }
+
+        if (secondCamera != null)
+        {
+            targetObject3.SetActive(true);
+            targetObject4.SetActive(true);
+        }
+
         openUI1.SetActive(true);
         openUI2.SetActive(true);
         Debug.Log("openUI1 active: " + openUI1.activeSelf);
         Debug.Log("openUI2 active: " + openUI2.activeSelf);
 
-        // コルーチンを開始して3秒後にUIを消す
-        StartCoroutine(HideUIAfterDelay1());
+        StartCoroutine(HideUIAfterDelay());
     }
 
-    void InCorrectAnswer1(string playerTag)
+
+    void IncorrectAnswer(string playerTag)
     {
-        Debug.Log("InCorrectAnswer1を実行します");
+        Debug.Log("IncorrectAnswerを実行します");
 
         // 各プレイヤーのPlayerMovementコンポーネントを取得
         PlayerMovement playerMovement1 = targetPlayer1.GetComponent<PlayerMovement>();
@@ -249,7 +263,7 @@ public class BoxCheck1 : MonoBehaviour
         {
             Debug.Log("プレイヤー１が吹き飛びます");
             // プレイヤー1が不正解なら移動を無効化
-            playerMovement1.can_move2 = 1;
+            playerMovement1.can_move1 = 1;
             isBlown1 = true;
 
             // 吹き飛ばし方向と距離を決定
@@ -261,7 +275,7 @@ public class BoxCheck1 : MonoBehaviour
         {
             Debug.Log("プレイヤー2が吹き飛びます");
             // プレイヤー2が不正解なら移動を無効化
-            playerMovement2.can_move2 = 1;
+            playerMovement2.can_move1 = 1;
             isBlown2 = true;
 
             // 吹き飛ばし方向と距離を決定
@@ -270,34 +284,28 @@ public class BoxCheck1 : MonoBehaviour
             targetPosition2 = (Vector2)targetPlayer2.transform.position + forceDirection2 * blowDistance;
         }
 
-        // 不正解音を再生（AudioSourceが設定されている場合のみ）
-        if (incorrectAudioSource1 != null && incorrectSound1 != null)
+        if (incorrectAudioSource != null && incorrectSound != null)
         {
-            incorrectAudioSource1.PlayOneShot(incorrectSound1);
+            incorrectAudioSource.PlayOneShot(incorrectSound);
         }
 
         blowTime = 0f;  // 吹き飛ばしの時間をリセット
-
-        // タイマー開始
         currentTime = timerDuration;  // タイマーを開始
         Debug.Log("タイマー開始: " + currentTime);
     }
 
-
-    void TimerEnded1()
+    void TimerEnded()
     {
         PlayerMovement playerMovement1 = targetPlayer1.GetComponent<PlayerMovement>();
         PlayerMovement playerMovement2 = targetPlayer2.GetComponent<PlayerMovement>();
 
         if (playerMovement1 != null)
         {
-            // can_move を 0 に設定して移動を再許可
-            playerMovement1.can_move2 = 0;
+            playerMovement1.can_move1 = 0;
         }
         if (playerMovement2 != null)
         {
-            // can_move を 0 に設定して移動を再許可
-            playerMovement2.can_move2 = 0;
+            playerMovement2.can_move1 = 0;
         }
 
         Debug.Log("タイマー終了。移動が再開されました。");
@@ -305,17 +313,4 @@ public class BoxCheck1 : MonoBehaviour
         // タイマーをリセット
         currentTime = 0;  // タイマーをリセット
     }
-
-    // プレイヤー1のテキストを非表示
-    private void HidePlayer1Text()
-    {
-        if (player1Text != null) player1Text.SetActive(false);
-    }
-
-    // プレイヤー2のテキストを非表示
-    private void HidePlayer2Text()
-    {
-        if (player2Text != null) player2Text.SetActive(false);
-    }
-
 }
