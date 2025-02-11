@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class MultiDisplayCameraAdjuster : MonoBehaviour
 {
@@ -6,10 +7,11 @@ public class MultiDisplayCameraAdjuster : MonoBehaviour
     public Camera player2Camera;  // Player2のカメラ
     public AudioListener player1Listener;  // Player1のAudioListener
     public AudioListener player2Listener;  // Player2のAudioListener
+    public AudioManager audioManager;  // AudioManagerの参照
 
     void Start()
     {
-        // ディスプレイの有効化（Display2が存在する場合）
+        // Displayが2つ以上ある場合、Display2を有効にする
         if (Display.displays.Length > 1)
             Display.displays[1].Activate();  // Display2を有効化
 
@@ -20,6 +22,9 @@ public class MultiDisplayCameraAdjuster : MonoBehaviour
         // オーディオリスナーの設定
         SetAudioListener(player1Listener, player1Camera);  // Player1のAudioListener設定
         SetAudioListener(player2Listener, player2Camera);  // Player2のAudioListener設定
+
+        // 初期状態でPlayer1の音を有効にする
+        audioManager.SetPlayer1Audio();
     }
 
     void AdjustCamera(Camera camera, float targetAspect, int displayIndex)
@@ -57,4 +62,29 @@ public class MultiDisplayCameraAdjuster : MonoBehaviour
             player2Listener.enabled = true;  // Player2のリスナーを有効化
         }
     }
+
+    // プレイヤー1のカメラがアクティブな場合にPlayer1の音量を設定
+    public void SwitchToPlayer1()
+    {
+        // Player1のAudioListenerを有効化
+        SetAudioListener(player1Listener, player1Camera);
+        // Player2のAudioListenerを無効化
+        SetAudioListener(player2Listener, player2Camera);
+
+        // Player1の音量を有効化し、Player2の音量をミュート
+        audioManager.SetPlayer1Audio();
+    }
+
+    // プレイヤー2のカメラがアクティブな場合にPlayer2の音量を設定
+    public void SwitchToPlayer2()
+    {
+        // Player2のAudioListenerを有効化
+        SetAudioListener(player2Listener, player2Camera);
+        // Player1のAudioListenerを無効化
+        SetAudioListener(player1Listener, player1Camera);
+
+        // Player2の音量を有効化し、Player1の音量をミュート
+        audioManager.SetPlayer2Audio();
+    }
 }
+

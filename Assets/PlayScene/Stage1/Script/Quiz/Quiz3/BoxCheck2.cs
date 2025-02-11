@@ -157,7 +157,15 @@ public class BoxCheck2 : MonoBehaviour
             if (item.CompareTag(correctAnswerTag))
             {
                 Debug.Log("ê≥âÇ≈Ç∑ÅI");
-                CorrectAnswer();
+                if(canPlayer1 && Input.GetButtonDown("Y_Button_1P"))
+                {
+                    CorrectAnswer("Player1");
+                }
+                if(canPlayer2 && Input.GetButtonDown("Y_Button_2P"))
+                {
+                    CorrectAnswer("Player2");
+                }
+                
             }
             else
             {
@@ -223,20 +231,20 @@ public class BoxCheck2 : MonoBehaviour
         openUI2.SetActive(false);
     }
 
-    void CorrectAnswer()
+    void CorrectAnswer(string playerTag)
     {
         if (correctAudioSource != null && correctSound != null)
         {
             correctAudioSource.PlayOneShot(correctSound);
         }
 
-        if (mainCamera != null)
+        if (playerTag == "Player1")
         {
             targetObject.SetActive(true);
             targetObject2.SetActive(true);
         }
 
-        if (secondCamera != null)
+        if (playerTag == "Player2")
         {
             targetObject3.SetActive(true);
             targetObject4.SetActive(true);
