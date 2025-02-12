@@ -19,14 +19,35 @@ public class PlayerAnimationController2 : MonoBehaviour
         {
             animator.SetBool(winAnimation, state);  // 勝利アニメーションの状態を設定
         }
+        else
+        {
+            animator = GetComponent<Animator>();
+
+            Debug.Log("animatorのあたい" + animator);
+
+            animator.SetBool(winAnimation, state);  // 敗北アニメーションの状態を設定
+
+        }
     }
 
     // プレイヤーが負けた場合に呼ばれる
     public void SetLoseAnimation(bool state)
     {
+        
         if (animator != null)
         {
+
             animator.SetBool(loseAnimation, state);  // 敗北アニメーションの状態を設定
+        }
+        else
+        {
+            animator = GetComponent<Animator>();
+            Debug.Log("Player2が負けたよ");
+
+            Debug.Log("animatorのあたい" + animator);
+
+            animator.SetBool(loseAnimation, state);  // 敗北アニメーションの状態を設定
+
         }
     }
 }

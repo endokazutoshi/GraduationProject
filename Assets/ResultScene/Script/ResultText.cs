@@ -40,7 +40,7 @@ public class ResultText : MonoBehaviour
             }
             if (player2AnimationController != null)
             {
-                Debug.Log("Player2が負けたよ");
+                //Debug.Log("Player2が負けたよ");
                 player2AnimationController.SetLoseAnimation(true);  // プレイヤー2の敗北アニメーション
             }
             if (player1camera2AnimationController != null)
@@ -60,14 +60,15 @@ public class ResultText : MonoBehaviour
         else if (player2Goal == 1 && player1Goal == 0)
         {
             // アニメーション設定
+            
+            if (player1AnimationController != null)
+            {
+                player1AnimationController.SetLoseAnimation(true);  // プレイヤー1の敗北アニメーション
+            }
             if (player2AnimationController != null)
             {
                 Debug.Log("Player2が勝ったよ");
                 player2AnimationController.SetWinAnimation(true);  // プレイヤー2の勝利アニメーション
-            }
-            if (player1AnimationController != null)
-            {
-                player1AnimationController.SetLoseAnimation(true);  // プレイヤー1の敗北アニメーション
             }
             if (player1camera2AnimationController != null)
             {
